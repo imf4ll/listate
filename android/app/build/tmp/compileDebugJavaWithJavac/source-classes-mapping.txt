@@ -1,0 +1,14 @@
+com/z3oxs/checklists/MainApplication.java
+ com.z3oxs.checklists.MainApplication
+ com.z3oxs.checklists.MainApplication$1
+com/z3oxs/checklists/BuildConfig.java
+ com.z3oxs.checklists.BuildConfig
+com/z3oxs/checklists/ReactNativeFlipper.java
+ com.z3oxs.checklists.ReactNativeFlipper
+ com.z3oxs.checklists.ReactNativeFlipper$1
+ com.z3oxs.checklists.ReactNativeFlipper$2
+ com.z3oxs.checklists.ReactNativeFlipper$2$1
+com/z3oxs/checklists/MainActivity.java
+ com.z3oxs.checklists.MainActivity
+com/facebook/react/PackageList.java
+ com.facebook.react.PackageList
