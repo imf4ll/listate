@@ -3,6 +3,9 @@
     <img src="./images/mockup_2.png" width="300" />
 </div>
 
+## 🤔 What's this?
+- An app to create and manage items checklists, like supermarket lists.
+
 &nbsp;
 ## 🔧 Setup:
 - Clone this repository:<br>
