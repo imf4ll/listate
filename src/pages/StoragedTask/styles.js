@@ -44,7 +44,7 @@ export const TitleObservationText = styled.Text`
 
 export const ItemsView = styled.View`
     align-items: center;
-    height: 80%;
+    height: 78.5%;
 `;
 
 export const TitleItemsText = styled.Text`
