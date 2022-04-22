@@ -16,13 +16,13 @@ import Menu from '../../components/Menu';
 import Empty from '../../assets/none.png';
 
 export default ({ navigation }) => {
-    const [ templates, setTemplates ] = useState([ false ]);
+    const [ templates, setTemplates ] = useState([]);
     const translate = useRef(new Animated.Value(100)).current;
     const fadeIn = useRef(new Animated.Value(0)).current;
     const isFocused = useIsFocused();
     const theme = useTheme();
 
-    useEffect(() => {
+    useEffect(async () => {
         Animated.parallel([
             Animated.timing(translate, {
                 toValue: 0,
@@ -97,14 +97,14 @@ export default ({ navigation }) => {
     });
 
     useEffect(async () => {
-        const templates = await AsyncStorage.getItem('templates');
+        const templates = JSON.parse(await AsyncStorage.getItem('templates'));
 
         if (templates !== null) {
-            setTemplates(JSON.parse(templates));
+            setTemplates(templates);
 
         }
 
-    }, [ isFocused ]);
+    }, [ window.onload, isFocused ]);
 
     const handleSettings = () => navigation.navigate('Settings');
 
@@ -115,67 +115,65 @@ export default ({ navigation }) => {
             }
         });
     
-    new Promise(( resolve ) => setTimeout(resolve, 1500))
-
     return (
         <ThemeProvider theme={ theme }>
             <Container>
                 { 
                     templates !== null && templates.length !== 0
                     ?
-                    <Scroll
-                        showsVerticalScrollIndicator={ false }
-                        contentContainerStyle={{ alignItems: 'center' }}
-                        style={{ transform: [{ translateY: translate }], opacity: fadeIn }}
-                    >
-                        {
-                            templates.map((i, k) => (
-                                <Template
-                                    key={ k }
-                                    onPress={ () => handleTask(i.id) }
-                                    style={({ pressed }) => [{
-                                        backgroundColor: pressed
-                                        ? theme.Press.pressed
-                                        : theme.background,
-                                        borderColor: i.color,
-                                    }]}
-                                >
-                                    <TitleTemplate>
-                                        { i.name }
-                                    </TitleTemplate>
-                                    {
-                                        i !== false && i.items.map((i, k) => (
-                                            <Item key={ k }>
-                                                <Checkmark name="check-box-outline-blank" size={ 20 } />
-                                                <TitleItem>
-                                                    { i.item }
-                                                </TitleItem>
-                                            </Item>
-                                        ))
-                                    }
-                                </Template>
-                            ))
-                        }
-                    </Scroll>
+                        <Scroll
+                            showsVerticalScrollIndicator={ false }
+                            contentContainerStyle={{ alignItems: 'center' }}
+                            style={{ transform: [{ translateY: translate }], opacity: fadeIn }}
+                        >
+                            {
+                                templates.map((i, k) => (
+                                    <Template
+                                        key={ k }
+                                        onPress={ () => handleTask(i.id) }
+                                        style={({ pressed }) => [{
+                                            backgroundColor: pressed
+                                            ? theme.Press.pressed
+                                            : theme.background,
+                                            borderColor: i.color,
+                                        }]}
+                                    >
+                                        <TitleTemplate>
+                                            { i.name }
+                                        </TitleTemplate>
+                                        {
+                                            i.items.map((i, k) => (
+                                                <Item key={ k }>
+                                                    <Checkmark name="check-box-outline-blank" size={ 20 } />
+                                                    <TitleItem>
+                                                        { i.item }
+                                                    </TitleItem>
+                                                </Item>
+                                            ))
+                                        }
+                                    </Template>
+                                ))
+                            }
+                        </Scroll>
                     :
-                    <Animated.View
-                        style={{
-                            width: '100%',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <Image
-                            source={ Empty }
+                        <Animated.View
                             style={{
-                                width: 300,
-                                height: 300,
+                                width: '100%',
+                                alignItems: 'center',
+                                justifyContent: 'center',
                             }}
-                        />
-                        <TitleNoOne>
-                            You don't have any template storaged, try to create a new one.
-                        </TitleNoOne>
-                    </Animated.View>
+                        >
+                            <Image
+                                source={ Empty }
+                                style={{
+                                    width: 300,
+                                    height: 300,
+                                }}
+                            />
+                            <TitleNoOne>
+                                You don't have any template storaged, try to create a new one.
+                            </TitleNoOne>
+                        </Animated.View>
                 }
                 <Menu navigation={ navigation } />
             </Container>

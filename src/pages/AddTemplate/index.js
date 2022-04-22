@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Animated, Easing } from 'react-native';
+import { Animated } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { v4 as uuid } from 'uuid';
 import { ThemeProvider } from 'styled-components';
@@ -52,11 +52,10 @@ export default ({ navigation }) => {
 
     useEffect(() => {
         if (itemsRef.length !== 0) {
-            Animated.timing(itemsRef[itemsRef.length - 1], {
+            Animated.spring(itemsRef[itemsRef.length - 1], {
                 toValue: 0,
                 duration: 1000,
                 useNativeDriver: false,
-                easing: Easing.bounce,
             }).start();
         }
     

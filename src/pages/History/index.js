@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Empty from '../../assets/empty.png';
 
 export default ({ navigation }) => {
-    const [ tasks, setTasks ] = useState([ false ]);
+    const [ tasks, setTasks ] = useState([]);
     const translate = useRef(new Animated.Value(500)).current;
     const isFocused = useIsFocused();
     const theme = useTheme();
@@ -30,8 +30,12 @@ export default ({ navigation }) => {
     }, []);
 
     useEffect(async () => {
-        const tasks = await AsyncStorage.getItem('history');
-        setTasks(JSON.parse(tasks));
+        const tasks = JSON.parse(await AsyncStorage.getItem('history'));
+
+        if (tasks !== null) {
+            setTasks(tasks);
+
+        }
 
     }, [ window.onload, isFocused ]);
 
@@ -54,8 +58,7 @@ export default ({ navigation }) => {
                         style={{ transform: [{ translateX: translate }] }}
                     >
                         {
-                            tasks !== null && tasks.map((i, k) => (
-                                i !== false &&
+                            tasks.map((i, k) => (
                                     <Task
                                         key={ k }
                                         onPress={ () => handleTask(i.id) }
