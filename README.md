@@ -1,10 +1,6 @@
 <div align="center">
-    ## Listate
-    <img src="./images/mockup_3.png" width="300" />
-    ## Check
-    <img src="./images/mockup_2.png" width="300" />
-    ## Log
     <img src="./images/mockup_1.png" width="300" />
+    <img src="./images/mockup_2.png" width="300" />
 </div>
 
 &nbsp;

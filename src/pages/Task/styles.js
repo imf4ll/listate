@@ -105,7 +105,7 @@ export const Middle = styled(Animated.View)`
 export const Done = styled(Icon.Button)`
     border-radius: 100px;
     color: ${ props => props.theme.primary };
-    background-color: ${ props => props.theme.ProgressBar.foreground };
+    background-color: ${ props => props.theme.button };
     padding: 20px 10px 20px 20px;
 `;
 
