@@ -1,4 +1,4 @@
-import { Animated } from 'react-native';
+import { Animated, Vibration } from 'react-native';
 import { useRef, useState, useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -23,13 +23,13 @@ export default ({ navigation }) => {
         if (menuOpen) {
             Animated.timing(translateMenu, {
                 toValue: 0,
-                duration: 500,
+                duration: 350,
                 useNativeDriver: true,
             }).start();
         
         } else {
             Animated.timing(translateMenu, {
-                toValue: 205,
+                toValue: 195,
                 duration: 350,
                 useNativeDriver: true,
             }).start();
@@ -37,16 +37,30 @@ export default ({ navigation }) => {
 
     }, [ menuOpen ]);
 
+    const handleTemplate = () => {
+        navigation.navigate('Template');
+        Vibration.vibrate(50);
+
+    }
+
     const handleHistory = () => {
         navigation.navigate('History');
+        Vibration.vibrate(50);
 
         setMenuOpen(false);
     }
 
     const handleSettings = () => {
         navigation.navigate('Settings');
+        Vibration.vibrate(50);
 
         setMenuOpen(false);
+    }
+
+    const handleLongPress = () => {
+        setMenuOpen(!menuOpen);
+        Vibration.vibrate(100);
+
     }
 
     return (
@@ -54,8 +68,8 @@ export default ({ navigation }) => {
             <Container>
                 <Menu style={{ transform: [{ translateY: translateMenu }] }}>
                     <MenuIcon
-                        onPress={ menuOpen ? () => setMenuOpen(!menuOpen) : () => navigation.navigate('Template') }
-                        onLongPress={ () => setMenuOpen(!menuOpen) }
+                        onPress={ menuOpen ? handleLongPress : handleTemplate }
+                        onLongPress={ handleLongPress }
                         activeOpacity={ 0.8 }
                         style={{ transform: [{ translateX: translateButton }] }}
                     >

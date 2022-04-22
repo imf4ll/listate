@@ -1,11 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeProvider } from 'styled-components';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Image, Animated, Easing } from 'react-native';
+import { useState, useEffect, useRef } from 'react';
+import { Image, Animated, Easing, Vibration } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import { v4 as uuid } from 'uuid';
 import useTheme from '../../hooks/useTheme';
-import { useState, useEffect, useRef } from 'react';
+import ProgressBar from '../../components/ProgressBar';
 import {
     Container, Task, Observation,
     None, TitleOver, Items,
@@ -13,7 +14,6 @@ import {
     Quantity, Sides, Button,
     Middle, Done, Delete,
 } from './styles';
-import ProgressBar from '../../components/ProgressBar';
 
 import Anymore from '../../assets/anymore.png';
 
@@ -110,20 +110,24 @@ export default ({ navigation, route }) => {
             title: task.name,
             headerRight: () => (
                 <Delete
-                    name="delete"
-                    color="#ff6363"
-                    size={ 25 }
                     onPress={ handleDeleteTask }
-                    activeOpacity={ 0.6 }
-                    underlayColor="transparent"
-                    backgroundColor="transparent"
-                />
+                    underlayColor={ theme.Header.underlay }
+                >
+                    <Icon
+                        name="delete"
+                        color="#ff6363"
+                        size={ 25 }
+                        backgroundColor="transparent"
+                    />
+                </Delete>
             )
         });
 
     }, [ task, observation ]);
 
     const handleNext = () => {
+        Vibration.vibrate(50);
+        
         if (current < task.items.length - 1) {
             setCurrent(current + 1);
             
@@ -141,6 +145,8 @@ export default ({ navigation, route }) => {
     }
 
     const handleAdd = id => {
+        Vibration.vibrate(50);
+        
         const i = task.items[id];
 
         if (i.total !== i.quantity) {
@@ -152,6 +158,8 @@ export default ({ navigation, route }) => {
     }
 
     const handleRemove = id => {
+        Vibration.vibrate(50);
+        
         const t = task.items[id];
 
         if (t.total > 0) {
@@ -163,6 +171,8 @@ export default ({ navigation, route }) => {
     }
 
     const handleDeleteTask = async () => {
+        Vibration.vibrate(50);
+        
         const templates = await AsyncStorage.getItem('templates');
         const newTemplates = JSON.parse(templates).filter(i => i.id !== id);
 
@@ -172,6 +182,8 @@ export default ({ navigation, route }) => {
     }
 
     const handleDone = async () => {
+        Vibration.vibrate(50);
+        
         const history = await AsyncStorage.getItem('history');
 
         if (history === null) {
@@ -207,7 +219,7 @@ export default ({ navigation, route }) => {
                             progress={ current / task.items.length }
                         />
                 }
-                <Task>   
+                <Task>
                     {
                         over
                         ?
@@ -244,6 +256,7 @@ export default ({ navigation, route }) => {
                         :
                             <Items
                                 showsVerticalScrollIndicator={ false }
+                                contentContainerStyle={{ alignItems: 'center' }}
                                 style={{ transform: [{ translateX: translateItems }] }}
                             >
                                 {

@@ -33,7 +33,7 @@ export default () => {
                         name="Template"
                         component={ AddTemplate }
                         options={{
-                            title: 'Add new template',
+                            title: 'New',
                             headerTitleAlign: 'center',
                             headerTintColor: theme.primary,
                             headerStyle: {
@@ -66,7 +66,7 @@ export default () => {
                             },
                             animation: 'slide_from_right',
                             headerRight: () => (
-                                <Version theme={ theme }>v1.0.2</Version>
+                                <Version theme={ theme }>v1.0.3</Version>
                             )
                         }}
                     />

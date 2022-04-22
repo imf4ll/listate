@@ -6,12 +6,12 @@ import { Image, View, Animated, TouchableOpacity } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import { useIsFocused } from '@react-navigation/native';
 import useTheme from '../../hooks/useTheme';
+import Menu from '../../components/Menu';
 import {
     Container, Scroll, Template,
     TitleTemplate, Item, TitleItem,
     Checkmark, TitleNoOne, Refresh
 } from './styles';
-import Menu from '../../components/Menu';
 
 import Empty from '../../assets/none.png';
 

@@ -15,7 +15,7 @@ export const Task = styled(Animated.View)`
 
 export const Observation = styled.View`
     align-items: center;
-    padding-bottom: 35px;
+    padding-bottom: 25px;
 `;
 
 export const Input = styled.TextInput`
@@ -30,38 +30,11 @@ export const Input = styled.TextInput`
     shadow-color: ${ props => props.theme.shadow };
 `;
 
-export const TitleObservation = styled.View`
-    flex-direction: row;
-    align-items: center;
-    padding-bottom: 15px;
-`;
-
-export const TitleObservationText = styled.Text`
-    color: ${ props => props.theme.primary };
-    font-size: 18px;
-    font-weight: bold;
-`;
-
-export const ItemsView = styled.View`
-    align-items: center;
-    height: 78.5%;
-`;
-
-export const TitleItemsText = styled.Text`
-    color: ${ props => props.theme.primary };
-    font-size: 18px;
-    font-weight: bold;
-    padding-bottom: 15px;
-`;
-
-export const TitleItems = styled.View`
-    flex-direction: row;
-`;
-
 export const Items = styled.ScrollView`
     background-color: ${ props => props.theme.background };
     border-radius: 5px;
-    margin-bottom: 0;
+    margin-bottom: 15px;
+    height: 85.5%;
     elevation: 5;
     shadow-color: ${ props => props.theme.shadow };
 `;
@@ -92,5 +65,6 @@ export const Quantity = styled.Text`
 `;
 
 export const Delete = styled(Icon.Button)`
-    padding: 10px 0 10px 10px;
+    border-radius: 100px;
+    padding: 7px;
 `;

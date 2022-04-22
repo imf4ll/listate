@@ -16,6 +16,8 @@ export const Menu = styled(Animated.View)`
 export const MenuIcon = styled(AnimatedIcon)`
     border-radius: 100px;
     margin-bottom: 20px;
-    padding: 25px;
+    padding: 22px;
     background-color: ${ props => props.theme.button };
+    elevation: 10;
+    shadow-color: ${ props => props.theme.shadow };
 `;

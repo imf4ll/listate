@@ -12,7 +12,8 @@ export const Container = styled.View`
 `;
 
 export const Task = styled.View`
-    width: 90%;
+    width: 100%;
+    align-items: center;
 `;
 
 export const Observation = styled(ObservationInput)`
@@ -23,7 +24,7 @@ export const Observation = styled(ObservationInput)`
     padding: 0 15px;
     border-radius: 8px;
     font-size: 16px;
-    width: 100%;
+    width: 90%;
     elevation: 5;
     shadow-color: ${ props => props.theme.shadow };
 `;
@@ -43,10 +44,12 @@ export const TitleOver = styled.Text`
 export const Items = styled(Animated.ScrollView)`
     margin-top: 6%;
     margin-bottom: 20%;
+    width: 100%;
 `;
 
 export const Item = styled(Animated.View)`
     align-items: center;
+    width: 90%;
     background-color: ${ props => props.theme.background };
     margin-bottom: 15px;
     padding: 5px 0;
@@ -109,6 +112,7 @@ export const Done = styled(Icon.Button)`
     padding: 20px 10px 20px 20px;
 `;
 
-export const Delete = styled(Icon.Button)`
-    padding: 10px 0 10px 10px;
+export const Delete = styled.TouchableHighlight`
+    border-radius: 100px;
+    padding: 7px;
 `;

@@ -9,8 +9,9 @@ export const dark = {
         border: '#444',
     },
     Header: {
-        button: 'rgb(180, 180, 180)',
+        button: '#fff',
         background: 'rgb(25, 25, 25)',
+        underlay: '#111'
     },
     ProgressBar: {
         background: '#383152',
@@ -39,6 +40,7 @@ export const light = {
     Header: {
         button: 'rgb(60, 60, 60)',
         background: 'rgb(240, 240, 240)',
+        underlay: 'rgb(240, 240, 240)',
     },
     ProgressBar: {
         background: '#9889c4',
