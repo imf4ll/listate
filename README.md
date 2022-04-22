@@ -1,10 +1,10 @@
 <div align="center">
-    <h1>Listate</h1>
-    <img src="./images/mockup_3.png" width="200" />
-    <h1>Check</h1>
-    <img src="./images/mockup_2.png" width="200" />
-    <h1>Log</h1>
-    <img src="./images/mockup_1.png" width="200" />
+    Listate
+    <img src="./images/mockup_3.png" width="250" />
+    Check
+    <img src="./images/mockup_2.png" width="250" />
+    Log
+    <img src="./images/mockup_1.png" width="250" />
 </div>
 
 &nbsp;
