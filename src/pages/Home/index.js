@@ -1,27 +1,26 @@
 import { useState, useEffect, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeProvider } from 'styled-components';
-import { Image, View, Animated } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Image, View, Animated, TouchableOpacity } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import { useIsFocused } from '@react-navigation/native';
 import useTheme from '../../hooks/useTheme';
 import {
     Container, Scroll, Template,
     TitleTemplate, Item, TitleItem,
-    Checkmark, TitleNoOne, History,
-    Settings, Refresh
+    Checkmark, TitleNoOne, Refresh
 } from './styles';
 import Menu from '../../components/Menu';
 
 import Empty from '../../assets/none.png';
 
 export default ({ navigation }) => {
-    const [ templates, setTemplates ] = useState([]);
+    const [ templates, setTemplates ] = useState([ false ]);
     const translate = useRef(new Animated.Value(100)).current;
     const fadeIn = useRef(new Animated.Value(0)).current;
     const isFocused = useIsFocused();
     const theme = useTheme();
-
 
     useEffect(() => {
         Animated.parallel([
@@ -38,30 +37,43 @@ export default ({ navigation }) => {
             }),
         ]).start();
 
-    }, [ window.onload ]);
+    }, []);
     
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <History
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                    }}
+                >
+                    <TouchableOpacity
                         onPress={ () => navigation.push('History') }
-                        size={ 25 }
-                        color={ theme.Header.button }
-                        name="history"
-                        backgroundColor="transparent"
-                        underlayColor="transparent"
                         activeOpacity={ 0.6 }
-                    />
-                    <Settings
+                    >
+                        <Icon
+                            size={ 25 }
+                            color={ theme.Header.button }
+                            name="history"
+                            backgroundColor="transparent"
+                            underlayColor="transparent"
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity
                         onPress={ handleSettings }
-                        size={ 25 }
-                        color={ theme.Header.button }
-                        name="more-vert"
-                        backgroundColor="transparent"
-                        underlayColor="transparent"
                         activeOpacity={ 0.6 }
-                    />
+                        style={{ marginLeft: 25 }}
+                    >
+                        <Icon
+                            size={ 25 }
+                            color={ theme.Header.button }
+                            name="more-vert"
+                            backgroundColor="transparent"
+                            underlayColor="transparent"
+                        />
+                    </TouchableOpacity>
                 </View>
             ),
             headerLeft: () => (
@@ -82,7 +94,6 @@ export default ({ navigation }) => {
                 />
             )
         });
-
     });
 
     useEffect(async () => {
@@ -103,13 +114,15 @@ export default ({ navigation }) => {
                 id,
             }
         });
+    
+    new Promise(( resolve ) => setTimeout(resolve, 1500))
 
     return (
         <ThemeProvider theme={ theme }>
             <Container>
                 { 
                     templates !== null && templates.length !== 0
-                    ? 
+                    ?
                     <Scroll
                         showsVerticalScrollIndicator={ false }
                         contentContainerStyle={{ alignItems: 'center' }}
@@ -131,7 +144,7 @@ export default ({ navigation }) => {
                                         { i.name }
                                     </TitleTemplate>
                                     {
-                                        i.items.map((i, k) => (
+                                        i !== false && i.items.map((i, k) => (
                                             <Item key={ k }>
                                                 <Checkmark name="check-box-outline-blank" size={ 20 } />
                                                 <TitleItem>
@@ -145,7 +158,13 @@ export default ({ navigation }) => {
                         }
                     </Scroll>
                     :
-                    <>
+                    <Animated.View
+                        style={{
+                            width: '100%',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
                         <Image
                             source={ Empty }
                             style={{
@@ -156,7 +175,7 @@ export default ({ navigation }) => {
                         <TitleNoOne>
                             You don't have any template storaged, try to create a new one.
                         </TitleNoOne>
-                    </>
+                    </Animated.View>
                 }
                 <Menu navigation={ navigation } />
             </Container>

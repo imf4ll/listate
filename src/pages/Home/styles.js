@@ -7,18 +7,11 @@ export const Container = styled.View`
     align-items: center;
     justify-content: center;
     background-color: ${ props => props.theme.secondary };
-`;
-
-export const History = styled(Icon.Button)`
-    padding: 10px 5px 10px 10px;
-`;
-
-export const Settings = styled(Icon.Button)`
-    padding: 10px 0 10px 10px;
+    padding-top: 10%;
 `;
 
 export const Refresh = styled(Icon.Button)`
-    padding: 10px 0 10px 10px;
+    padding: 0;
 `;
 
 export const TitleNoOne = styled.Text`
@@ -45,8 +38,8 @@ export const Template = styled.Pressable`
     padding-left: 15px;
     padding-bottom: 20px;
     border-radius: 5px;
-    border-width: 1px;
-    border-color: ${ props => props.theme.Template.border };
+    elevation: 5;
+    shadow-color: ${ props => props.theme.shadow };
 `;
 
 export const TitleTemplate = styled.Text`

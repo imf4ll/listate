@@ -18,8 +18,8 @@ export const Task = styled.Pressable`
     padding-left: 15px;
     padding-bottom: 20px;
     border-radius: 5px;
-    border-width: 1px;
-    border-color: ${ props => props.theme.Template.border };
+    elevation: 5;
+    shadow-color: ${ props => props.theme.shadow };
 `;
 
 export const Title = styled.Text`
@@ -46,8 +46,8 @@ export const TitleCheck = styled.Text`
 
 export const Time = styled.Text`
     position: absolute;
-    bottom: 5px;
-    right: 5px;
+    bottom: 10px;
+    right: 10px;
     color: ${ props => props.theme.Header.button }
 `;
 

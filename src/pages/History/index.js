@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Empty from '../../assets/empty.png';
 
 export default ({ navigation }) => {
-    const [ tasks, setTasks ] = useState([]);
+    const [ tasks, setTasks ] = useState([ false ]);
     const translate = useRef(new Animated.Value(500)).current;
     const isFocused = useIsFocused();
     const theme = useTheme();
@@ -55,35 +55,34 @@ export default ({ navigation }) => {
                     >
                         {
                             tasks !== null && tasks.map((i, k) => (
-                                <Task
-                                    key={ k }
-                                    onPress={ () => handleTask(i.id) }
-                                    style={({ pressed }) => [{
-                                        backgroundColor: pressed
-                                        ? theme.Press.pressed
-                                        : theme.background,
-                                        borderColor: i.task.color,
-                                        borderWidth: 1,
-                                    }]}
-                                >
-                                    <Title>{ i.task.name }</Title>
-                                    <Checks>
-                                        {
-                                            i.task.items.map((i, k) => (
-                                                <Check key={ k }>
-                                                    <Icon
-                                                        name={ i.checked ? "check-box" : "check-box-outline-blank" }
-                                                        size={ 20 }
-                                                        color={ theme.primary }
-                                                        style={{ marginHorizontal: 5 }}
-                                                    />
-                                                    <TitleCheck>{ i.item } ({ i.total }/{ i.quantity })</TitleCheck>
-                                                </Check>
-                                            ))
-                                        }
-                                    </Checks>
-                                    <Time>{ i.timestamp }</Time>
-                                </Task>
+                                i !== false &&
+                                    <Task
+                                        key={ k }
+                                        onPress={ () => handleTask(i.id) }
+                                        style={({ pressed }) => [{
+                                            backgroundColor: pressed
+                                            ? theme.Press.pressed
+                                            : theme.background,
+                                        }]}
+                                    >
+                                        <Title>{ i.task.name }</Title>
+                                        <Checks>
+                                            {
+                                                i.task.items.map((i, k) => (
+                                                    <Check key={ k }>
+                                                        <Icon
+                                                            name={ i.checked ? "check-box" : "check-box-outline-blank" }
+                                                            size={ 20 }
+                                                            color={ theme.primary }
+                                                            style={{ marginHorizontal: 5 }}
+                                                        />
+                                                        <TitleCheck>{ i.item } ({ i.total }/{ i.quantity })</TitleCheck>
+                                                    </Check>
+                                                ))
+                                            }
+                                        </Checks>
+                                        <Time>{ i.timestamp }</Time>
+                                    </Task>
                             ))
                         }
                     </Tasks>

@@ -27,6 +27,8 @@ export const TextInput = styled.TextInput`
     font-size: 16px;
     width: 100%;
     border-radius: 5px;
+    elevation: 5;
+    shadow-color: ${ props => props.theme.shadow };
 `;
 
 export const ColorInput = styled.TextInput`
@@ -39,6 +41,8 @@ export const ColorInput = styled.TextInput`
     width: 100%;
     border-radius: 5px;
     border-width: 1px;
+    elevation: 5;
+    shadow-color: ${ props => props.theme.shadow };
 `;
 
 export const Scroll = styled(Animated.ScrollView)`
@@ -47,6 +51,8 @@ export const Scroll = styled(Animated.ScrollView)`
     border-radius: 8px;
     background-color: ${ props => props.theme.background };
     border-radius: 5px;
+    elevation: 5;
+    shadow-color: ${ props => props.theme.shadow };
 `;
 
 export const Task = styled.View`
@@ -92,7 +98,7 @@ export const AddNumberInput = styled.TextInput`
 
 export const New = styled(Icon.Button)`
     text-align: center;
-    color: ${ props => props.theme.Menu.icon };
+    color: ${ props => props.theme.primary };
     padding: 20px 10px 20px 20px;
     border-radius: 8px;
 `;

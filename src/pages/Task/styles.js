@@ -24,6 +24,8 @@ export const Observation = styled(ObservationInput)`
     border-radius: 8px;
     font-size: 16px;
     width: 100%;
+    elevation: 5;
+    shadow-color: ${ props => props.theme.shadow };
 `;
 
 export const None = styled(Animated.View)`
@@ -49,6 +51,8 @@ export const Item = styled(Animated.View)`
     margin-bottom: 15px;
     padding: 5px 0;
     border-radius: 6px;
+    elevation: 10;
+    shadow-color: ${ props => props.theme.shadow };
 `;
 
 export const Information = styled.View`
@@ -73,13 +77,15 @@ export const Quantity = styled.Text`
 
 export const Sides = styled(Animated.View)`
     position: absolute;
-    bottom: 2%;
+    bottom: 2.5%;
     flex-direction: row;
     justify-content: space-between;
-    width: 90%;
-    padding: 10px 20px;
+    width: 85%;
+    padding: 8px 20px;
     background-color: ${ props => props.theme.background };
     border-radius: 8px;
+    elevation: 5;
+    shadow-color: ${ props => props.theme.shadow };
 `;
 
 export const Button = styled(Icon.Button)`
@@ -92,8 +98,8 @@ export const Middle = styled(Animated.View)`
     position: absolute;
     bottom: 7.5%;
     justify-content: center;
-    color: blue;
-    padding: 10px;
+    border-radius: 100px;
+    elevation: 5;
 `;
 
 export const Done = styled(Icon.Button)`

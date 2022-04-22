@@ -3,15 +3,14 @@ export const dark = {
     secondary: '#121212',
     text: '#fff',
     background: '#222',
-    separator: 'rgb(100, 100, 100)',
+    shadow: '#000',
+    button: '#894fff',
     Template: {
         border: '#444',
     },
-    Menu: {
-        icon: '#8a8a8a',
-    },
     Header: {
-        button: 'rgb(160, 160, 160)',
+        button: 'rgb(180, 180, 180)',
+        background: 'rgb(25, 25, 25)',
     },
     ProgressBar: {
         background: '#383152',
@@ -32,15 +31,14 @@ export const light = {
     secondary: '#eee',
     text: '#111',
     background: 'rgb(225, 225, 225)',
-    separator: 'rgb(20, 20, 20)',
+    shadow: '#000',
+    button: '#894fff',
     Template: {
         border: 'rgb(200, 200, 200)',
     },
-    Menu: {
-        icon: 'rgb(50, 50, 50)',
-    },
     Header: {
-        button: 'rgb(100, 100, 100)',
+        button: 'rgb(60, 60, 60)',
+        background: 'rgb(240, 240, 240)',
     },
     ProgressBar: {
         background: '#9889c4',
@@ -52,6 +50,6 @@ export const light = {
         done: '#49e83a',
     },
     Press: {
-        pressed: 'rgb(180, 180, 180)',
+        pressed: 'rgb(210, 210, 210)',
     }
 }

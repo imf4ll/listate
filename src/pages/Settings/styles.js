@@ -16,6 +16,8 @@ export const Section = styled(Animated.View)`
     margin: 5px 10px 20px 10px;
     border-radius: 5px;
     background-color: ${ props => props.theme.background };
+    elevation: 7;
+    shadow-color: ${ props => props.theme.shadow };
 `;
 
 export const TitleSection = styled(Animated.View)`
@@ -43,7 +45,7 @@ export const TitleSetting = styled.View`
 `;
 
 export const IconSetting = styled(IconAnimated)`
-    color: ${ props => props.theme.Menu.icon };
+    color: ${ props => props.theme.primary };
     font-size: 30px;
     margin-right: 10px;
 `;
@@ -58,7 +60,9 @@ export const Title = styled.Text`
     font-size: 16px;
 `;
 
-export const Button = styled.Text`
+export const Button = styled.TouchableOpacity``;
+
+export const TitleButton = styled.Text`
     font-size: 16px;
     color: #ff5c5c;
 `;

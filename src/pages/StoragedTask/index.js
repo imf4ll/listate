@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeProvider } from 'styled-components';
-import { Animated, Easing } from 'react-native';
+import { Animated } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import useTheme from '../../hooks/useTheme';
 import { useState, useEffect, useRef } from 'react';
@@ -25,9 +25,8 @@ export default ({ navigation, route }) => {
 
         Animated.timing(translateItems, {
             toValue: 0,
-            duration: 1000,
+            duration: 500,
             useNativeDriver: true,
-            easing: Easing.bounce,
         }).start();
 
         navigation.setOptions({

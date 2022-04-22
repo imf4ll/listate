@@ -6,7 +6,7 @@ export const Container = styled.View`
     flex: 1;
     background-color: ${ props => props.theme.secondary };
     align-items: center;
-    padding-top: 25px;
+    padding-top: 15px;
 `;
 
 export const Task = styled(Animated.View)`
@@ -26,6 +26,8 @@ export const Input = styled.TextInput`
     border-radius: 5px;
     font-size: 16px;
     width: 100%;
+    elevation: 5;
+    shadow-color: ${ props => props.theme.shadow };
 `;
 
 export const TitleObservation = styled.View`
@@ -59,7 +61,9 @@ export const TitleItems = styled.View`
 export const Items = styled.ScrollView`
     background-color: ${ props => props.theme.background };
     border-radius: 5px;
-    margin-bottom: 15px;
+    margin-bottom: 0;
+    elevation: 5;
+    shadow-color: ${ props => props.theme.shadow };
 `;
 
 export const Item = styled.View`

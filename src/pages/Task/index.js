@@ -42,7 +42,7 @@ export default ({ navigation, route }) => {
                 toValue: 0,
                 duration: 500,
                 useNativeDriver: true,
-                delay: 750,
+                delay: 500,
             }),
             Animated.timing(translateButtons, {
                 toValue: 0,
@@ -311,5 +311,5 @@ export default ({ navigation, route }) => {
                     }
             </Container>
         </ThemeProvider>
-    )
+    );
 }

@@ -2,7 +2,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import useTheme from './hooks/useTheme';
-
 import Home from './pages/Home';
 import AddTemplate from './pages/AddTemplate';
 import Task from './pages/Task';
@@ -20,16 +19,14 @@ export default () => {
         <>
             <StatusBar style="light" />
             <NavigationContainer>
-                <Stack.Navigator initialRouteName="Home">
+                <Stack.Navigator
+                    initialRouteName="Home"
+                >
                     <Stack.Screen
                         name="Home"
                         component={ Home }
                         options={{
-                            headerTitleAlign: 'center',
-                            headerTintColor: theme.primary,
-                            headerStyle: {
-                                backgroundColor: theme.background,
-                            },
+                            headerShown: false,
                         }}
                     />
                     <Stack.Screen
@@ -40,9 +37,9 @@ export default () => {
                             headerTitleAlign: 'center',
                             headerTintColor: theme.primary,
                             headerStyle: {
-                                backgroundColor: theme.background,
+                                backgroundColor: theme.Header.background,
                             },
-                            animation: 'fade_from_bottom',
+                            animation: 'slide_from_left',
                         }}
                     />
                     <Stack.Screen
@@ -53,9 +50,9 @@ export default () => {
                             headerTitleAlign: 'center',
                             headerTintColor: theme.primary,
                             headerStyle: {
-                                backgroundColor: theme.background,
+                                backgroundColor: theme.Header.background,
                             },
-                            animation: 'fade_from_bottom',
+                            animation: 'slide_from_left',
                         }}
                     />
                     <Stack.Screen
@@ -65,7 +62,7 @@ export default () => {
                             headerTitleAlign: 'center',
                             headerTintColor: theme.primary,
                             headerStyle: {
-                                backgroundColor: theme.background,
+                                backgroundColor: theme.Header.background,
                             },
                             animation: 'slide_from_right',
                             headerRight: () => (
@@ -80,7 +77,7 @@ export default () => {
                             headerTitleAlign: 'center',
                             headerTintColor: theme.primary,
                             headerStyle: {
-                                backgroundColor: theme.background,
+                                backgroundColor: theme.Header.background,
                             },
                             animation: 'slide_from_right',
                         }}
@@ -93,7 +90,7 @@ export default () => {
                             headerTitleAlign: 'center',
                             headerTintColor: theme.primary,
                             headerStyle: {
-                                backgroundColor: theme.background,
+                                backgroundColor: theme.Header.background,
                             },
                             animation: 'slide_from_left',
                         }}

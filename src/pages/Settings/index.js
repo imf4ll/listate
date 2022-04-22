@@ -9,6 +9,7 @@ import {
     Container, Section, TitleSection,
     Setting, TitleSetting, IconSetting,
     Title, Button, TitleSectionText,
+    TitleButton,
 } from './styles';
 
 export default ({ navigation }) => {
@@ -59,8 +60,9 @@ export default ({ navigation }) => {
 
     const handleWipe = async () => {
         await AsyncStorage.multiRemove(['templates', 'history']);
+        await reloadAsync();
+        
         navigation.goBack();
-
     }
 
     const handleSwitch = async () => {
@@ -77,7 +79,7 @@ export default ({ navigation }) => {
                     style={{ transform: [{ translateX: translate }] }}
                 >
                     <Icon
-                        color={ theme.Header.button }
+                        color={ theme.primary }
                         name="playlist-add-check"
                         size={ 30 }
                         style={{ marginRight: 10 }}
@@ -95,7 +97,9 @@ export default ({ navigation }) => {
                             />
                             <Title>Clear history</Title>
                         </TitleSetting>
-                        <Button onPress={ handleHistory }>Clear</Button>
+                        <Button onPress={ handleHistory } activeOpacity={ 0.7 }>
+                            <TitleButton>Clear</TitleButton>
+                        </Button>
                     </Setting>
                     <Setting>
                         <TitleSetting>
@@ -105,7 +109,9 @@ export default ({ navigation }) => {
                             />
                             <Title>Clear templates</Title>
                         </TitleSetting>
-                        <Button onPress={ handleTemplates }>Clear</Button>
+                        <Button onPress={ handleTemplates } activeOpacity={ 0.7 }>
+                            <TitleButton>Clear</TitleButton>
+                        </Button>
                     </Setting>
                     <Setting>
                         <TitleSetting>
@@ -115,14 +121,16 @@ export default ({ navigation }) => {
                             />
                             <Title>Wipe</Title>
                         </TitleSetting>
-                        <Button onPress={ handleWipe }>Wipe</Button>
+                        <Button onPress={ handleWipe } activeOpacity={ 0.7 }>
+                            <TitleButton>Wipe</TitleButton>
+                        </Button>
                     </Setting>
                 </Section>
                 <TitleSection
                     style={{ transform: [{ translateX: translate }] }}
                 >
                     <Icon
-                        color={ theme.Header.button }
+                        color={ theme.primary }
                         name="palette"
                         size={ 30 }
                         style={{ marginRight: 10 }}
