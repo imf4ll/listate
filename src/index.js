@@ -3,12 +3,14 @@ import { Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import useTheme from './hooks/useTheme';
+
 import Home from './pages/Home';
 import AddTemplate from './pages/AddTemplate';
 import Task from './pages/Task';
 import Settings from './pages/Settings';
 import History from './pages/History';
 import StoragedTask from './pages/StoragedTask';
+import EditTemplate from './pages/EditTemplate';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,7 +36,7 @@ export default () => {
                         component={ AddTemplate }
                         options={{
                             title: 'New',
-                            headerTitleAlign: 'center',
+                            headerTitleAlign: 'left',
                             headerTintColor: theme.primary,
                             headerStyle: {
                                 backgroundColor: theme.Header.background,
@@ -47,7 +49,7 @@ export default () => {
                         component={ Task }
                         options={{
                             title: '',
-                            headerTitleAlign: 'center',
+                            headerTitleAlign: 'left',
                             headerTintColor: theme.primary,
                             headerStyle: {
                                 backgroundColor: theme.Header.background,
@@ -59,7 +61,7 @@ export default () => {
                         name="Settings"
                         component={ Settings }
                         options={{
-                            headerTitleAlign: 'center',
+                            headerTitleAlign: 'left',
                             headerTintColor: theme.primary,
                             headerStyle: {
                                 backgroundColor: theme.Header.background,
@@ -74,7 +76,7 @@ export default () => {
                         name="History"
                         component={ History }
                         options={{
-                            headerTitleAlign: 'center',
+                            headerTitleAlign: 'left',
                             headerTintColor: theme.primary,
                             headerStyle: {
                                 backgroundColor: theme.Header.background,
@@ -87,12 +89,25 @@ export default () => {
                         component={ StoragedTask }
                         options={{
                             title: '',
-                            headerTitleAlign: 'center',
+                            headerTitleAlign: 'left',
                             headerTintColor: theme.primary,
                             headerStyle: {
                                 backgroundColor: theme.Header.background,
                             },
                             animation: 'slide_from_left',
+                        }}
+                    />
+                    <Stack.Screen
+                        name="EditTemplate"
+                        component={ EditTemplate }
+                        options={{
+                            title: 'Edit',
+                            headerTitleAlign: 'left',
+                            headerTintColor: theme.primary,
+                            headerStyle: {
+                                backgroundColor: theme.Header.background,
+                            },
+                            animation: 'slide_from_right',
                         }}
                     />
                 </Stack.Navigator>

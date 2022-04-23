@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from 'react';
 import { Animated } from 'react-native';
 import { Vibration } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { v4 as uuid } from 'uuid';
 import { ThemeProvider } from 'styled-components';
 import Toast from 'react-native-simple-toast';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -13,19 +12,23 @@ import {
     AddNumberInput, Button,
 } from './styles';
 
-export default ({ navigation }) => {
+export default ({ navigation, route }) => {
     const translateInputs = useRef(new Animated.Value(-250)).current;
     const translateScroll = useRef(new Animated.Value(-500)).current;
     const widthFocused = useRef(new Animated.Value(100)).current;
     const tasksRef = useRef();
     const [ itemsRef, setItemsRef ] = useState([]);
     const [ inputFocused, setInputFocused ] = useState(false);
-    const [ name, setName ] = useState('');
-    const [ items, setItems ] = useState([]);
+    const [ template, setTemplate ] = useState({});
+    const { id } = route.params.params;
     const theme = useTheme();
     const phcolor = "rgb(160, 160, 160)";
 
-    useEffect(() => {
+    useEffect(async () => {
+        const template = JSON.parse(await AsyncStorage.getItem('templates')).filter(i => i.id === id)[0];
+        setItemsRef(template.items.map(() => new Animated.Value(-500)));
+        setTemplate(template);
+
         Animated.parallel([
             Animated.timing(translateInputs, {
                 toValue: 0,
@@ -39,17 +42,6 @@ export default ({ navigation }) => {
                 delay: 250,
             }),
         ]).start();
-
-        const newItem = {
-            item: '',
-            quantity: 1,
-            total: 0,
-            checked: false,
-            id: items.length,
-        }
-
-        setItems([ newItem ]);
-        setItemsRef([ new Animated.Value(-500) ]);
 
     }, []);
 
@@ -74,19 +66,35 @@ export default ({ navigation }) => {
 
     useEffect(() => {
         if (itemsRef.length !== 0) {
-            Animated.spring(itemsRef[itemsRef.length - 1], {
-                toValue: 0,
-                duration: 1000,
-                useNativeDriver: false,
-            }).start();
+            itemsRef.forEach(i => 
+                Animated.spring(i, {
+                    toValue: 0,
+                    duration: 1000,
+                    useNativeDriver: false,
+                }).start());
         }
-    
+
     }, [ itemsRef ]);
 
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
                 <>
+                    <Button
+                        onPress={ handleDeleteTask }
+                        android_ripple={{
+                            color: theme.Header.ripple,
+                            borderless: true,
+                            radius: 35,
+                            foreground: true,
+                        }}
+                    >
+                        <Icon
+                            size={ 25 }
+                            color="#ff6363"
+                            name="delete"
+                        />
+                    </Button>
                     <Button
                         onPress={ handleNew }
                         android_ripple={{
@@ -95,6 +103,7 @@ export default ({ navigation }) => {
                             radius: 35,
                             foreground: true,
                         }}
+                        style={{ marginLeft: 10 }}
                     >
                         <Icon
                             size={ 25 }
@@ -110,7 +119,7 @@ export default ({ navigation }) => {
                             radius: 35,
                             foreground: true,
                         }}
-                        style={{ marginLeft: 15 }}
+                        style={{ marginLeft: 10 }}
                     >
                         <Icon
                             size={ 25 }
@@ -121,8 +130,7 @@ export default ({ navigation }) => {
                 </>
             )
         });
-
-    }, [ name, items ]);
+    });
 
     const handleNew = () => {
         Vibration.vibrate(50);
@@ -132,49 +140,57 @@ export default ({ navigation }) => {
             quantity: 1,
             total: 0,
             checked: false,
-            id: items.length,
+            id: template.items.length,
         }
 
-        setItems([ ...items, newItem ]);
+        setTemplate({
+            id,
+            name: template.name,
+            items: [ ...template.items, newItem ],
+        });
+        
         setItemsRef([ ...itemsRef, new Animated.Value(-500) ]);
     }
 
-    const handleInput = (text, i) => items[i].item = text;
+    const handleDeleteTask = async () => {
+        Vibration.vibrate(50);
+        
+        const templates = await AsyncStorage.getItem('templates');
+        const newTemplates = JSON.parse(templates).filter(i => i.id !== id);
 
-    const handleNumberInput = (text, i) => items[i].quantity = parseInt(text);
+        await AsyncStorage.setItem('templates', JSON.stringify(newTemplates));
+
+        navigation.goBack();
+    }
+
+    const handleInput = (text, i) => template.items[i].item = text;
+
+    const handleNumberInput = (text, i) => template.items[i].quantity = parseInt(text);
 
     const handleSave = async () => {
-        const template = await AsyncStorage.getItem('templates');
+        const templates = await AsyncStorage.getItem('templates');
         Vibration.vibrate(50);
 
-        if (name === '') {
+        if (template.name === '') {
             Toast.show('Template name cannot be empty.', Toast.SHORT);
 
-            return
         }
 
-        if (items.filter(i => i.item === '').length !== 0) {
+        if (template.items.filter(i => i.item === '').length !== 0) {
             Toast.show('Items name cannot be empty.', Toast.SHORT);
 
             return
         }
 
-        if (template === null) {
-            await AsyncStorage.setItem('templates', JSON.stringify([{
-                id: uuid(),
-                name,
-                items
-            }]));
+        const templateParsed = JSON.parse(templates);
 
-        } else {
-            const templateParsed = JSON.parse(template);
-
-            await AsyncStorage.setItem('templates', JSON.stringify([...templateParsed.map(i => i), {
-                id: uuid(),
-                name,
-                items,
-            }]));
-        }
+        await AsyncStorage.setItem('templates', JSON.stringify([
+            ...templateParsed.filter(i => i.id !== id).map(i => i), {
+                id,
+                name: template.name,
+                items: template.items,
+            }
+        ]));
 
         Toast.show('Created successfully', Toast.SHORT);
         navigation.goBack();
@@ -184,9 +200,9 @@ export default ({ navigation }) => {
         <ThemeProvider theme={ theme }>
             <Container>
                 <NameInput
-                    placeholder="Name"
                     placeholderTextColor={ phcolor }
-                    onChangeText={ setName }
+                    onChangeText={ t => template.name = t }
+                    defaultValue={ template.name }
                     onFocus={ () => setInputFocused(true) }
                     onBlur={ () => setInputFocused(false) }
                     style={{ width: widthFocused, transform: [{ translateY: translateInputs }] }}
@@ -199,22 +215,21 @@ export default ({ navigation }) => {
                 >
                     <Task>
                         { 
-                            items.map((_, k) => (
+                            template.items !== undefined && template.items.map((i, k) => (
                                 <Item
                                     key={ k }
                                     style={{ transform: [{ translateX: itemsRef[k] }] }}
                                 >
                                     <AddInput
-                                        placeholder="Item name"
                                         placeholderTextColor={ phcolor }
-                                        onChangeText={ t => handleInput(t, k) }
+                                        defaultValue={ i.item }
+                                        onChangeText={ t => handleInput(t, i.id) }
                                     />
                                     <AddNumberInput
-                                        placeholder="0"
                                         placeholderTextColor={ phcolor }
                                         keyboardType="numeric"
-                                        onChangeText={ t => handleNumberInput(t, k) }
-                                        defaultValue="1"
+                                        defaultValue={ `${ i.quantity }` }
+                                        onChangeText={ t => handleNumberInput(t, i.id) }
                                     />
                                 </Item>
                             )) 

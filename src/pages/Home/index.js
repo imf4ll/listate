@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeProvider } from 'styled-components';
-import { Image, Animated } from 'react-native';
+import { Image, Animated, Vibration } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import useTheme from '../../hooks/useTheme';
 import Menu from '../../components/Menu';
@@ -53,7 +53,17 @@ export default ({ navigation }) => {
                 id,
             }
         });
-    
+
+    const handleEdit = id => {
+        Vibration.vibrate(50);
+
+        navigation.navigate('EditTemplate', {
+            params: {
+                id,
+            }
+        });
+    }
+
     return (
         <ThemeProvider theme={ theme }>
             <Container>
@@ -73,13 +83,12 @@ export default ({ navigation }) => {
                                         android_ripple={{
                                             color: theme.Header.ripple,
                                             borderless: false,
-                                            radius: 350,
-                                            foreground: true,
+                                            radius: 250,
+                                            foreground: false,
                                         }}
+                                        onLongPress={ () => handleEdit(i.id) }
                                     >
-                                        <TitleTemplate>
-                                            { i.name }
-                                        </TitleTemplate>
+                                        <TitleTemplate>{ i.name }</TitleTemplate>
                                         {
                                             i.items.map((i, k) => (
                                                 <Item key={ k }>

@@ -37,6 +37,10 @@ export default ({ navigation, route }) => {
         const templates = await AsyncStorage.getItem('templates');
         const task = JSON.parse(templates).filter(i => i.id === id)[0];
 
+        navigation.setOptions({
+            title: task.name,
+        });
+
         Animated.parallel([
             Animated.spring(translateItems, {
                 toValue: 0,
@@ -105,31 +109,6 @@ export default ({ navigation, route }) => {
 
     }, [ over ]);
 
-    useEffect(() => {
-        navigation.setOptions({
-            title: task.name,
-            headerRight: () => (
-                <Button
-                    onPress={ handleDeleteTask }
-                    android_ripple={{
-                        color: theme.Header.ripple,
-                        radius: 35,
-                        borderless: true,
-                        foreground: true,
-                    }}
-                >
-                    <Icon
-                        name="delete"
-                        color="#ff6363"
-                        size={ 25 }
-                        backgroundColor="transparent"
-                    />
-                </Button>
-            )
-        });
-
-    }, [ task, observation ]);
-
     const handleNext = () => {
         Vibration.vibrate(50);
         
@@ -173,17 +152,6 @@ export default ({ navigation, route }) => {
                 items: task.items.map(i => i.id === id ? { ...i, total: i.total -=1 } : i),
             });
         }
-    }
-
-    const handleDeleteTask = async () => {
-        Vibration.vibrate(50);
-        
-        const templates = await AsyncStorage.getItem('templates');
-        const newTemplates = JSON.parse(templates).filter(i => i.id !== id);
-
-        await AsyncStorage.setItem('templates', JSON.stringify(newTemplates));
-
-        navigation.goBack();
     }
 
     const handleDone = async () => {
