@@ -3,16 +3,15 @@
     <img src="./images/mockup_2.png" width="300" />
 </div>
 
-## ♻️ Changelog v1.0.3
-- Added vibration support
-- Animations on header buttons
-- Fixed 'StoragedTask' scrollview size
-- New 'AddTemplate' page
-- Some little fixes around the app
+## 🤔 What's this?
+- An app to create and manage items checklists, like supermarket lists, completely **OFFLINE**.
 
 &nbsp;
-## 🤔 What's this?
-- An app to create and manage items checklists, like supermarket lists.
+## ♻️ Changelog v1.0.4
+- Added ripple effect to buttons
+- Valid input checking
+- Scrollviews now follow the bottom
+- New page to reconfigure a template
 
 &nbsp;
 ## 🔧 Setup:
