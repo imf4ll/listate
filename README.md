@@ -1,6 +1,6 @@
 <div align="center">
-    <img src="./images/mockup_1.png" width="250" />
-    <img src="./images/mockup_2.png" width="250" />
+    <img src="./images/mockup_1.png" width="280" />
+    <img src="./images/mockup_2.png" width="280" />
 </div>
 
 ## 🤔 What's this?
