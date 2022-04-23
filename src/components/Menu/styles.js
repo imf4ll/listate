@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
-import { Animated, TouchableOpacity } from 'react-native';
+import { Animated, Pressable } from 'react-native';
 
-const AnimatedIcon = Animated.createAnimatedComponent(TouchableOpacity);
+const AnimatedIcon = Animated.createAnimatedComponent(Pressable);
 
 export const Container = styled.View`
     position: absolute;

@@ -1,8 +1,8 @@
 import styled from 'styled-components/native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Animated, TextInput } from 'react-native';
+import { Animated, TextInput, Pressable } from 'react-native';
 
-const ObservationInput = Animated.createAnimatedComponent(TextInput)
+const ObservationInput = Animated.createAnimatedComponent(TextInput);
+const ButtonPress = Animated.createAnimatedComponent(Pressable);
 
 export const Container = styled.View`
     flex: 1;
@@ -84,35 +84,22 @@ export const Sides = styled(Animated.View)`
     flex-direction: row;
     justify-content: space-between;
     width: 85%;
-    padding: 8px 20px;
+    padding: 0 20px;
     background-color: ${ props => props.theme.background };
     border-radius: 8px;
     elevation: 5;
     shadow-color: ${ props => props.theme.shadow };
 `;
 
-export const Button = styled(Icon.Button)`
-    padding: 10px 5px 10px 15px;
-    border-radius: 8px;
+export const Button = styled(ButtonPress)`
+    padding: 20px;
 `;
 
 export const Middle = styled(Animated.View)`
     flex-direction: row;
     position: absolute;
-    bottom: 7.5%;
+    bottom: 8.5%;
     justify-content: center;
     border-radius: 100px;
     elevation: 5;
-`;
-
-export const Done = styled(Icon.Button)`
-    border-radius: 100px;
-    color: ${ props => props.theme.primary };
-    background-color: ${ props => props.theme.button };
-    padding: 20px 10px 20px 20px;
-`;
-
-export const Delete = styled.TouchableHighlight`
-    border-radius: 100px;
-    padding: 7px;
 `;

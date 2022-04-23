@@ -8,15 +8,16 @@ import Toast from 'react-native-simple-toast';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import useTheme from '../../hooks/useTheme';
 import { 
-    Container, NameInput, Scroll,
+    Container, NameInput, Tasks,
     Task, Item, AddInput,
-    AddNumberInput, New, Done,
+    AddNumberInput, Button,
 } from './styles';
 
 export default ({ navigation }) => {
     const translateInputs = useRef(new Animated.Value(-250)).current;
     const translateScroll = useRef(new Animated.Value(-500)).current;
     const widthFocused = useRef(new Animated.Value(100)).current;
+    const tasksRef = useRef();
     const [ itemsRef, setItemsRef ] = useState([]);
     const [ inputFocused, setInputFocused ] = useState(false);
     const [ name, setName ] = useState('');
@@ -86,28 +87,37 @@ export default ({ navigation }) => {
         navigation.setOptions({
             headerRight: () => (
                 <>
-                    <New
-                        underlayColor={ theme.Header.underlay }
+                    <Button
                         onPress={ handleNew }
+                        android_ripple={{
+                            color: theme.Header.ripple,
+                            borderless: true,
+                            radius: 35,
+                            foreground: true,
+                        }}
                     >
                         <Icon
                             size={ 25 }
                             color={ theme.Header.button }
                             name="add-circle-outline"
-                            backgroundColor="transparent"
                         />
-                    </New>
-                    <Done
-                        underlayColor={ theme.Header.underlay }
+                    </Button>
+                    <Button
                         onPress={ handleSave }
+                        android_ripple={{
+                            color: theme.Header.ripple,
+                            borderless: true,
+                            radius: 35,
+                            foreground: true,
+                        }}
+                        style={{ marginLeft: 15 }}
                     >
                         <Icon
                             size={ 25 }
                             color={ theme.Header.button }
                             name="done"
-                            backgroundColor="transparent"
                         />
-                    </Done>
+                    </Button>
                 </>
             )
         });
@@ -134,6 +144,18 @@ export default ({ navigation }) => {
     const handleNumberInput = (text, i) => items[i].quantity = parseInt(text);
 
     const handleSave = async () => {
+        if (name === '') {
+            Toast.show('Template name cannot be empty.', Toast.SHORT);
+
+            return
+        }
+
+        if (items.filter(i => i.item === '').length !== 0) {
+            Toast.show('Items name cannot be empty.', Toast.SHORT);
+
+            return
+        }
+
         const template = await AsyncStorage.getItem('templates');
         Vibration.vibrate(50);
 
@@ -169,9 +191,11 @@ export default ({ navigation }) => {
                     onBlur={ () => setInputFocused(false) }
                     style={{ width: widthFocused, transform: [{ translateY: translateInputs }] }}
                 />
-                <Scroll
+                <Tasks
+                    ref={ tasksRef }
                     showsVerticalScrollIndicator={ false }
                     style={{ transform: [{ translateX: translateScroll }] }}
+                    onContentSizeChange={ () => tasksRef.current.scrollToEnd({ animated: true, }) }
                 >
                     <Task>
                         { 
@@ -197,7 +221,7 @@ export default ({ navigation }) => {
                             )) 
                         }
                     </Task>
-                </Scroll>
+                </Tasks>
             </Container>
         </ThemeProvider>
     );

@@ -1,14 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeProvider } from 'styled-components';
-import { Animated, Vibration } from 'react-native';
+import { Animated, Vibration, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import useTheme from '../../hooks/useTheme';
 import { useState, useEffect, useRef } from 'react';
 import {
     Container, Task, Observation,
     Items, Item, Information,
-    Title, Quantity, Delete,
-    Input,
+    Title, Quantity, Input,
 } from './styles';
 
 export default ({ navigation, route }) => {
@@ -31,17 +30,22 @@ export default ({ navigation, route }) => {
         navigation.setOptions({
             title: task.task.name,
             headerRight: () => (
-                <Delete
-                    underlayColor={ theme.Header.underlay }
+                <Pressable
                     onPress={ handleDelete }
+                    android_ripple={{
+                        color: theme.Header.ripple,
+                        borderless: true,
+                        radius: 35,
+                        foreground: true,
+                    }}
+                    style={{ padding: 10 }}
                 >
                     <Icon
                         name="delete"
                         color="#ff6363"
                         size={ 25 }
-                        backgroundColor="transparent"
                     />
-                </Delete>
+                </Pressable>
             )
         });
 

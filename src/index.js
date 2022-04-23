@@ -1,4 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
+import { Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import useTheme from './hooks/useTheme';
@@ -6,7 +7,6 @@ import Home from './pages/Home';
 import AddTemplate from './pages/AddTemplate';
 import Task from './pages/Task';
 import Settings from './pages/Settings';
-import { Version } from './pages/Settings/styles';
 import History from './pages/History';
 import StoragedTask from './pages/StoragedTask';
 
@@ -66,7 +66,7 @@ export default () => {
                             },
                             animation: 'slide_from_right',
                             headerRight: () => (
-                                <Version theme={ theme }>v1.0.3</Version>
+                                <Text style={{ fontSize: 16, color: 'rgb(150, 150, 150)' }}>v1.0.4</Text>
                             )
                         }}
                     />

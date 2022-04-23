@@ -25,7 +25,7 @@ export const NameInput = styled(Input)`
     border-bottom-color: ${ props => props.theme.background };
 `;
 
-export const Scroll = styled(Animated.ScrollView)`
+export const Tasks = styled(Animated.ScrollView)`
     width: 100%;
     margin-top: 10px;
     border-radius: 5px;
@@ -68,13 +68,7 @@ export const AddNumberInput = styled.TextInput`
     text-align: center;
 `;
 
-export const Done = styled.TouchableHighlight`
-    border-radius: 100px;
-    padding: 7px;
-`;
-
-export const New = styled.TouchableHighlight`
-    margin-right: 15px;
+export const Button = styled.Pressable`
     border-radius: 100px;
     padding: 7px;
 `;

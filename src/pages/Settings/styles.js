@@ -66,8 +66,3 @@ export const TitleButton = styled.Text`
     font-size: 16px;
     color: #ff5c5c;
 `;
-
-export const Version = styled.Text`
-    color: ${ props => props.theme.Header.button };
-    font-size: 16px;
-`;

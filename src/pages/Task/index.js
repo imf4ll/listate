@@ -12,7 +12,7 @@ import {
     None, TitleOver, Items,
     Item, Information, Title,
     Quantity, Sides, Button,
-    Middle, Done, Delete,
+    Middle,
 } from './styles';
 
 import Anymore from '../../assets/anymore.png';
@@ -24,13 +24,13 @@ export default ({ navigation, route }) => {
     const translateNone = useRef(new Animated.Value(0)).current;
     const translateObservation = useRef(new Animated.Value(-250)).current;
     const scaleOver = useRef(new Animated.Value(1)).current;
+    const itemsScroll = useRef();
     const [ itemsRef, setItemsRef ] = useState([]);
     const [ observation, setObservation ] = useState('');
     const [ current, setCurrent ] = useState(0);
     const [ task, setTask ] = useState({});
     const [ over, setOver ] = useState(false);
     const { id } = route.params.params;
-    const Fire = Animated.createAnimatedComponent(Icon.Button);
     const theme = useTheme();
     
     useEffect(async () => {
@@ -109,9 +109,14 @@ export default ({ navigation, route }) => {
         navigation.setOptions({
             title: task.name,
             headerRight: () => (
-                <Delete
+                <Button
                     onPress={ handleDeleteTask }
-                    underlayColor={ theme.Header.underlay }
+                    android_ripple={{
+                        color: theme.Header.ripple,
+                        radius: 35,
+                        borderless: true,
+                        foreground: true,
+                    }}
                 >
                     <Icon
                         name="delete"
@@ -119,7 +124,7 @@ export default ({ navigation, route }) => {
                         size={ 25 }
                         backgroundColor="transparent"
                     />
-                </Delete>
+                </Button>
             )
         });
 
@@ -241,23 +246,31 @@ export default ({ navigation, route }) => {
                                         }}
                                     />
                                     <TitleOver>You don't have anymore task :)</TitleOver>
-                                    <Fire
-                                        name="local-fire-department"
-                                        size={ 80 }
-                                        color="#F44336"
+                                    <Button
                                         onPress={ handleDone }
-                                        underlayColor="transparent"
-                                        backgroundColor="transparent"
-                                        activeOpacity={ 0.8 }
-                                        style={{ marginTop: '10%', transform: [{ scale: scaleOver }] }}
-                                    />
+                                        android_ripple={{
+                                            color: theme.Header.ripple,
+                                            borderless: true,
+                                            radius: 50,
+                                            foreground: true,
+                                        }}
+                                        style={{ marginTop: '5%', transform: [{ scale: scaleOver }] }}
+                                    >
+                                        <Icon
+                                            name="local-fire-department"
+                                            size={ 80 }
+                                            color="#F44336"
+                                        />
+                                    </Button>
                                 </None>
                             </>
                         :
                             <Items
+                                ref={ itemsScroll }
                                 showsVerticalScrollIndicator={ false }
                                 contentContainerStyle={{ alignItems: 'center' }}
                                 style={{ transform: [{ translateX: translateItems }] }}
+                                onContentSizeChange={ () => itemsScroll.current.scrollToEnd({ animated: true }) }
                             >
                                 {
                                     task.items !== undefined && task.items.filter((_, k) => k <= current).map((i, k) => (
@@ -292,33 +305,55 @@ export default ({ navigation, route }) => {
                             <>
                                 <Sides style={{ transform: [{ translateY: translateButtons }] }}>
                                     <Button
-                                        backgroundColor="transparent"
-                                        name="remove"
-                                        activeOpacity={ 0.8 }
-                                        underlayColor={ theme.Buttons.remove }
-                                        color={ theme.primary }
-                                        size={ 35 }
                                         onPress={ () => handleRemove(current) }
-                                    />
+                                        android_ripple={{
+                                            color: theme.Header.ripple,
+                                            radius: 30,
+                                            borderless: false,
+                                            foreground: true,
+                                        }}
+                                    >
+                                        <Icon
+                                            backgroundColor="transparent"
+                                            name="remove"
+                                            color={ theme.primary }
+                                            size={ 35 }
+                                        />
+                                    </Button>
                                     <Button
-                                        backgroundColor="transparent"
-                                        activeOpacity={ 0.8 }
-                                        underlayColor={ theme.Buttons.add }
-                                        color={ theme.primary }
-                                        name="add"
-                                        size={ 35 }
                                         onPress={ () => handleAdd(current) }
-                                    />
+                                        android_ripple={{
+                                            color: theme.Header.ripple,
+                                            radius: 30,
+                                            borderless: false,
+                                            foreground: true,
+                                        }}
+                                    >
+                                        <Icon
+                                            backgroundColor="transparent"
+                                            color={ theme.primary }
+                                            name="add"
+                                            size={ 35 }
+                                        />
+                                    </Button>
                                 </Sides>
                                 <Middle style={{ transform: [{ translateY: translateDone }] }}>
-                                    <Done
-                                        backgroundColor="transparent"
-                                        activeOpacity={ 0.8 }
-                                        underlayColor="transparent"
-                                        name="done"
-                                        size={ 35 }
+                                    <Button
                                         onPress={ handleNext }
-                                    />
+                                        android_ripple={{
+                                            color: theme.Header.ripple,
+                                            radius: 40,
+                                            borderless: true,
+                                            foreground: false,
+                                        }}
+                                        style={{ backgroundColor: theme.button, borderRadius: 100, }}
+                                    >
+                                        <Icon
+                                            color="white"
+                                            name="done"
+                                            size={ 35 }
+                                        />
+                                    </Button>
                                 </Middle>
                             </>
                     }

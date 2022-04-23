@@ -38,6 +38,7 @@ export const Template = styled.Pressable`
     padding-left: 15px;
     padding-bottom: 20px;
     border-radius: 5px;
+    background-color: ${ props => props.theme.background };
     elevation: 5;
     shadow-color: ${ props => props.theme.shadow };
 `;

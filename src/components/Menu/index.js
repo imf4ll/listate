@@ -9,6 +9,7 @@ export default ({ navigation }) => {
     const [ menuOpen, setMenuOpen ] = useState(false);
     const translateButton = useRef(new Animated.Value(250)).current;
     const translateMenu = useRef(new Animated.Value(0)).current;
+    const theme = useTheme();
 
     useEffect(() => {
         Animated.timing(translateButton, {
@@ -64,18 +65,21 @@ export default ({ navigation }) => {
     }
 
     return (
-        <ThemeProvider theme={ useTheme() }> 
+        <ThemeProvider theme={ theme }> 
             <Container>
                 <Menu style={{ transform: [{ translateY: translateMenu }] }}>
                     <MenuIcon
+                        style={{ transform: [{ translateX: translateButton }] }}
                         onPress={ menuOpen ? handleLongPress : handleTemplate }
                         onLongPress={ handleLongPress }
-                        activeOpacity={ 0.8 }
-                        style={{ transform: [{ translateX: translateButton }] }}
+                        android_ripple={{
+                            color: theme.Header.ripple,
+                            borderless: false,
+                            radius: 38,
+                            foreground: true,
+                        }}
                     >
                         <Icon
-                            backgroundColor="transparent"
-                            underlayColor="transparent"
                             name={ menuOpen ? "expand-more" : "add-task" }
                             size={ 30 }
                             color="white"
@@ -84,11 +88,14 @@ export default ({ navigation }) => {
                     <MenuIcon
                         style={{ transform: [{ translateX: translateButton }] }}
                         onPress={ handleHistory }
-                        activeOpacity={ 0.8 }
+                        android_ripple={{
+                            color: theme.Header.ripple,
+                            borderless: false,
+                            radius: 38,
+                            foreground: true,
+                        }}
                     >
                         <Icon
-                            backgroundColor="transparent"
-                            underlayColor="transparent"
                             name="history"
                             size={ 30 }
                             color="white"
@@ -97,11 +104,14 @@ export default ({ navigation }) => {
                     <MenuIcon
                         style={{ transform: [{ translateX: translateButton }] }}
                         onPress={ handleSettings }
-                        activeOpacity={ 0.8 }
+                        android_ripple={{
+                            color: theme.Header.ripple,
+                            borderless: false,
+                            radius: 38,
+                            foreground: true,
+                        }}
                     >
                         <Icon
-                            backgroundColor="transparent"
-                            underlayColor="transparent"
                             name="settings"
                             size={ 30 }
                             color="white"

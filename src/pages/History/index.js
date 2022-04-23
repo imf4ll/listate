@@ -62,11 +62,12 @@ export default ({ navigation }) => {
                                     <Task
                                         key={ k }
                                         onPress={ () => handleTask(i.id) }
-                                        style={({ pressed }) => [{
-                                            backgroundColor: pressed
-                                            ? theme.Press.pressed
-                                            : theme.background,
-                                        }]}
+                                        android_ripple={{
+                                            color: theme.Header.ripple,
+                                            borderless: false,
+                                            radius: 500,
+                                            foreground: true,
+                                        }}
                                     >
                                         <Title>{ i.task.name }</Title>
                                         <Checks>
