@@ -142,8 +142,6 @@ export default ({ navigation }) => {
         setItemsRef([ ...itemsRef, new Animated.Value(-500) ]);
     }
 
-    console.log(items)
-
     const handleDeleteTask = id => {
         Vibration.vibrate(50);
 

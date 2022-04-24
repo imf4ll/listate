@@ -13,7 +13,6 @@ import {
 } from './styles';
 
 export default ({ navigation, route }) => {
-    const translateTasks = useRef(new Animated.Value(-500)).current;
     const translateInputs = useRef(new Animated.Value(-250)).current;
     const widthFocused = useRef(new Animated.Value(100)).current;
     const tasksRef = useRef();
@@ -36,11 +35,12 @@ export default ({ navigation, route }) => {
 
         setItemsRef(template.items.map(() => new Animated.Value(-500)));
         setDeleteRef(template.items.map(() => new Animated.Value(1)));
+                
         setTemplate({
             ...template,
             items,
         });
-
+        
         Animated.parallel([
             Animated.timing(translateInputs, {
                 toValue: 0,
@@ -71,15 +71,22 @@ export default ({ navigation, route }) => {
     }, [ inputFocused ]);
 
     useEffect(() => {
-        if (itemsRef.length !== 0) {
+        if (itemsRef.length !== 0 && template.items !== undefined) {
             let delay = 250;
 
             itemsRef.forEach((i, k) => {
+                let isInitial = false;
+                
+                if (template.items[k] !== undefined && template.items[k].hasOwnProperty('initial')) {
+                    isInitial = true;
+                    
+                }
+
                 Animated.spring(i, {
                     toValue: 0,
                     duration: 750,
                     useNativeDriver: false,
-                    delay: template.items !== undefined && template.items[k].initial ? delay : 0
+                    delay: isInitial ? delay : 0,
                 }).start();
 
                 delay += 150;
@@ -275,6 +282,7 @@ export default ({ navigation, route }) => {
                                 style={{ transform: [{ translateX: itemsRef[k] }, { scale: deleteRef[k] }] }}
                             >
                                 <AddInput
+                                    placeholder="Item name"
                                     placeholderTextColor={ phcolor }
                                     defaultValue={ i.item }
                                     onChangeText={ t => handleInput(t, i.id) }

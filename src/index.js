@@ -68,7 +68,7 @@ export default () => {
                             },
                             animation: 'slide_from_right',
                             headerRight: () => (
-                                <Text style={{ fontSize: 16, color: 'rgb(150, 150, 150)' }}>v1.0.4</Text>
+                                <Text style={{ fontSize: 16, color: 'rgb(150, 150, 150)' }}>v1.0.5</Text>
                             )
                         }}
                     />
