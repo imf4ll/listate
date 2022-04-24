@@ -9,6 +9,7 @@
 &nbsp;
 ## ♻️ Changelog v1.0.5
 - On long press in any task while creating or editing any template will delete the one
+- Some fixes
 
 &nbsp;
 ## 🔧 Setup:
