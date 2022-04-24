@@ -188,7 +188,7 @@ export default ({ navigation, route }) => {
 
         Animated.timing(deleteRef[id], {
             toValue: 0,
-            duration: 400,
+            duration: 250,
             useNativeDriver: false,
         }).start(({ finished }) => {
             setTemplate({

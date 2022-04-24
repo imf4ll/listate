@@ -147,7 +147,7 @@ export default ({ navigation }) => {
 
         Animated.timing(deleteRef[id], {
             toValue: 0,
-            duration: 500,
+            duration: 250,
             useNativeDriver: false,
         }).start(({ finished }) => {
             setItems(items.filter(i => i.id !== id).map((i, k) => {
@@ -179,6 +179,12 @@ export default ({ navigation }) => {
     const handleSave = async () => {
         const template = await AsyncStorage.getItem('templates');
         Vibration.vibrate(50);
+
+        if (items.length === 0) {
+            Toast.show('Items cannot be empty.', Toast.SHORT);
+
+            return
+        }
 
         if (name === '') {
             Toast.show('Template name cannot be empty.', Toast.SHORT);
