@@ -8,16 +8,17 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import useTheme from '../../hooks/useTheme';
 import { 
     Container, NameInput, Tasks,
-    Task, Item, AddInput,
-    AddNumberInput, Button,
+    Item, AddInput, AddNumberInput,
+    Button,
 } from './styles';
 
 export default ({ navigation, route }) => {
+    const translateTasks = useRef(new Animated.Value(-500)).current;
     const translateInputs = useRef(new Animated.Value(-250)).current;
-    const translateScroll = useRef(new Animated.Value(-500)).current;
     const widthFocused = useRef(new Animated.Value(100)).current;
     const tasksRef = useRef();
     const [ itemsRef, setItemsRef ] = useState([]);
+    const [ deleteRef, setDeleteRef ] = useState([]);
     const [ inputFocused, setInputFocused ] = useState(false);
     const [ template, setTemplate ] = useState({});
     const { id } = route.params.params;
@@ -26,22 +27,27 @@ export default ({ navigation, route }) => {
 
     useEffect(async () => {
         const template = JSON.parse(await AsyncStorage.getItem('templates')).filter(i => i.id === id)[0];
+        const items = template.items.map(i => {
+            return {
+                ...i,
+                initial: true,
+            }
+        });
+
         setItemsRef(template.items.map(() => new Animated.Value(-500)));
-        setTemplate(template);
+        setDeleteRef(template.items.map(() => new Animated.Value(1)));
+        setTemplate({
+            ...template,
+            items,
+        });
 
         Animated.parallel([
             Animated.timing(translateInputs, {
                 toValue: 0,
                 duration: 500,
                 useNativeDriver: false,
-            }),
-            Animated.spring(translateScroll, {
-                toValue: 0,
-                duration: 750,
-                useNativeDriver: true,
-                delay: 250,
-            }),
-        ]).start();
+            }).start(),
+        ]);
 
     }, []);
 
@@ -66,22 +72,28 @@ export default ({ navigation, route }) => {
 
     useEffect(() => {
         if (itemsRef.length !== 0) {
-            itemsRef.forEach(i => 
+            let delay = 250;
+
+            itemsRef.forEach((i, k) => {
                 Animated.spring(i, {
                     toValue: 0,
-                    duration: 1000,
+                    duration: 750,
                     useNativeDriver: false,
-                }).start());
+                    delay: template.items !== undefined && template.items[k].initial ? delay : 0
+                }).start();
+
+                delay += 150;
+            });
         }
 
-    }, [ itemsRef ]);
+    }, [ template, itemsRef ]);
 
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
                 <>
                     <Button
-                        onPress={ handleDeleteTask }
+                        onPress={ handleDeleteTemplate }
                         android_ripple={{
                             color: theme.Header.ripple,
                             borderless: true,
@@ -149,10 +161,11 @@ export default ({ navigation, route }) => {
             items: [ ...template.items, newItem ],
         });
         
+        setDeleteRef([ ...deleteRef, new Animated.Value(1) ]);
         setItemsRef([ ...itemsRef, new Animated.Value(-500) ]);
     }
 
-    const handleDeleteTask = async () => {
+    const handleDeleteTemplate = async () => {
         Vibration.vibrate(50);
         
         const templates = await AsyncStorage.getItem('templates');
@@ -163,6 +176,40 @@ export default ({ navigation, route }) => {
         navigation.goBack();
     }
 
+    const handleDeleteTask = id => {
+        Vibration.vibrate(50);
+
+        Animated.timing(deleteRef[id], {
+            toValue: 0,
+            duration: 400,
+            useNativeDriver: false,
+        }).start(({ finished }) => {
+            setTemplate({
+                id: template.id,
+                name: template.name,
+                items: template.items.filter(i => i.id !== id).map((i, k) => {
+                    return {
+                        id: k,
+                        item: i.item,
+                        quantity: i.quantity,
+                        checked: i.checked,
+                        total: i.total,
+                    }
+                })
+            });
+
+            setItemsRef(itemsRef.filter((_, k) => k !== id));
+            setDeleteRef(deleteRef.filter((_, k) => k !== id));
+
+            finished &&
+                Animated.timing(deleteRef[id], {
+                    toValue: 1,
+                    duration: 0,
+                    useNativeDriver: false,
+                }).start();
+        });
+    }
+
     const handleInput = (text, i) => template.items[i].item = text;
 
     const handleNumberInput = (text, i) => template.items[i].quantity = parseInt(text);
@@ -171,9 +218,16 @@ export default ({ navigation, route }) => {
         const templates = await AsyncStorage.getItem('templates');
         Vibration.vibrate(50);
 
+        if (template.items.length === 0) {
+            Toast.show('Items cannot be empty.', Toast.SHORT);
+
+            return
+        }
+
         if (template.name === '') {
             Toast.show('Template name cannot be empty.', Toast.SHORT);
 
+            return
         }
 
         if (template.items.filter(i => i.item === '').length !== 0) {
@@ -210,31 +264,30 @@ export default ({ navigation, route }) => {
                 <Tasks
                     ref={ tasksRef }
                     showsVerticalScrollIndicator={ false }
-                    style={{ transform: [{ translateX: translateScroll }] }}
+                    contentContainerStyle={{ alignItems: 'center' }}
                     onContentSizeChange={ () => tasksRef.current.scrollToEnd({ animated: true, }) }
                 >
-                    <Task>
-                        { 
-                            template.items !== undefined && template.items.map((i, k) => (
-                                <Item
-                                    key={ k }
-                                    style={{ transform: [{ translateX: itemsRef[k] }] }}
-                                >
-                                    <AddInput
-                                        placeholderTextColor={ phcolor }
-                                        defaultValue={ i.item }
-                                        onChangeText={ t => handleInput(t, i.id) }
-                                    />
-                                    <AddNumberInput
-                                        placeholderTextColor={ phcolor }
-                                        keyboardType="numeric"
-                                        defaultValue={ `${ i.quantity }` }
-                                        onChangeText={ t => handleNumberInput(t, i.id) }
-                                    />
-                                </Item>
-                            )) 
-                        }
-                    </Task>
+                    { 
+                        template.items !== undefined && template.items.map((i, k) => (
+                            <Item
+                                key={ k }
+                                onLongPress={ () => handleDeleteTask(k) }
+                                style={{ transform: [{ translateX: itemsRef[k] }, { scale: deleteRef[k] }] }}
+                            >
+                                <AddInput
+                                    placeholderTextColor={ phcolor }
+                                    defaultValue={ i.item }
+                                    onChangeText={ t => handleInput(t, i.id) }
+                                />
+                                <AddNumberInput
+                                    placeholderTextColor={ phcolor }
+                                    keyboardType="numeric"
+                                    defaultValue={ `${ i.quantity }` }
+                                    onChangeText={ t => handleNumberInput(t, i.id) }
+                                />
+                            </Item>
+                        )) 
+                    }
                 </Tasks>
             </Container>
         </ThemeProvider>

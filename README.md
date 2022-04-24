@@ -7,11 +7,8 @@
 - An app to create and manage items checklists, like supermarket lists, completely **OFFLINE**.
 
 &nbsp;
-## ♻️ Changelog v1.0.4
-- Added ripple effect to buttons
-- Valid input checking
-- Scrollviews now follow the bottom
-- New page to reconfigure a template
+## ♻️ Changelog v1.0.5
+- On long press in any task while creating or editing any template will delete the one
 
 &nbsp;
 ## 🔧 Setup:

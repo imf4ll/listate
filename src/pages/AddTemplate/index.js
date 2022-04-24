@@ -19,6 +19,7 @@ export default ({ navigation }) => {
     const widthFocused = useRef(new Animated.Value(100)).current;
     const tasksRef = useRef();
     const [ itemsRef, setItemsRef ] = useState([]);
+    const [ deleteRef, setDeleteRef ] = useState([]);
     const [ inputFocused, setInputFocused ] = useState(false);
     const [ name, setName ] = useState('');
     const [ items, setItems ] = useState([]);
@@ -50,6 +51,7 @@ export default ({ navigation }) => {
 
         setItems([ newItem ]);
         setItemsRef([ new Animated.Value(-500) ]);
+        setDeleteRef([ new Animated.Value(1) ]);
 
     }, []);
 
@@ -136,7 +138,40 @@ export default ({ navigation }) => {
         }
 
         setItems([ ...items, newItem ]);
+        setDeleteRef([ ...deleteRef, new Animated.Value(1) ]);
         setItemsRef([ ...itemsRef, new Animated.Value(-500) ]);
+    }
+
+    console.log(items)
+
+    const handleDeleteTask = id => {
+        Vibration.vibrate(50);
+
+        Animated.timing(deleteRef[id], {
+            toValue: 0,
+            duration: 500,
+            useNativeDriver: false,
+        }).start(({ finished }) => {
+            setItems(items.filter(i => i.id !== id).map((i, k) => {
+                return {
+                    id: k,
+                    item: i.item,
+                    quantity: i.quantity,
+                    checked: false,
+                    total: 0,
+                }
+            }));
+
+            setItemsRef(itemsRef.filter((_, k) => k !== id));
+            setDeleteRef(deleteRef.filter((_, k) => k !== id));
+
+            finished &&
+                Animated.timing(deleteRef[id], {
+                    toValue: 1,
+                    duration: 0,
+                    useNativeDriver: false,
+                }).start();
+        });
     }
 
     const handleInput = (text, i) => items[i].item = text;
@@ -199,13 +234,15 @@ export default ({ navigation }) => {
                 >
                     <Task>
                         { 
-                            items.map((_, k) => (
+                            items.map((i, k) => (
                                 <Item
                                     key={ k }
-                                    style={{ transform: [{ translateX: itemsRef[k] }] }}
+                                    style={{ transform: [{ translateX: itemsRef[k] }, { scale: deleteRef[k] }] }}
+                                    onLongPress={ () => handleDeleteTask(k) }
                                 >
                                     <AddInput
                                         placeholder="Item name"
+                                        defaultValue={ i.item }
                                         placeholderTextColor={ phcolor }
                                         onChangeText={ t => handleInput(t, k) }
                                     />
@@ -214,7 +251,7 @@ export default ({ navigation }) => {
                                         placeholderTextColor={ phcolor }
                                         keyboardType="numeric"
                                         onChangeText={ t => handleNumberInput(t, k) }
-                                        defaultValue="1"
+                                        defaultValue={ `${ i.quantity }` }
                                     />
                                 </Item>
                             )) 

@@ -28,10 +28,6 @@ export const Tasks = styled(Animated.ScrollView)`
     border-radius: 5px;
 `;
 
-export const Task = styled.View`
-    align-items: center;
-`;
-
 export const Item = styled(ItemPressable)`
     width: 90%;
     flex-direction: row;
@@ -40,12 +36,12 @@ export const Item = styled(ItemPressable)`
     background-color: ${ props => props.theme.background };
     border-radius: 5px;
     margin: 7.5px 0;
+    padding: 15px 0;
     elevation: 5;
     shadow-color: ${ props => props.theme.shadow };
 `;
 
 export const AddInput = styled.TextInput`
-    height: 50px;
     color: ${ props => props.theme.primary };
     margin: 10px 10px 10px 0;
     padding-left: 10px;
@@ -56,7 +52,6 @@ export const AddInput = styled.TextInput`
 `;
 
 export const AddNumberInput = styled.TextInput`
-    height: 50px;
     color: ${ props => props.theme.primary };
     margin: 10px 0;
     border-radius: 8px;
