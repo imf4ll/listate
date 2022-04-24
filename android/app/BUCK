@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.z3oxs.checklists",
+    package = "com.z3oxs.listate",
 )
 
 android_resource(
     name = "res",
-    package = "com.z3oxs.checklists",
+    package = "com.z3oxs.listate",
     res = "src/main/res",
 )
 
