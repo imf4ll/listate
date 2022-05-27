@@ -2,7 +2,7 @@
   "expo": {
     "name": "Listate",
     "slug": "Listate",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",

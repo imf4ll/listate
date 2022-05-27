@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
-import { Animated } from 'react-native';
-import { Vibration } from 'react-native';
+import { Animated, Vibration } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { v4 as uuid } from 'uuid';
 import { ThemeProvider } from 'styled-components';
 import Toast from 'react-native-simple-toast';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import useTheme from '../../hooks/useTheme';
 import { 
     Container, NameInput, Tasks,

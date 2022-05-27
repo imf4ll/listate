@@ -4,13 +4,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import useTheme from './hooks/useTheme';
 
-import Home from './pages/Home';
-import AddTemplate from './pages/AddTemplate';
-import Task from './pages/Task';
-import Settings from './pages/Settings';
-import History from './pages/History';
-import StoragedTask from './pages/StoragedTask';
-import EditTemplate from './pages/EditTemplate';
+import Home from './screens/Home';
+import AddTemplate from './screens/AddTemplate';
+import Task from './screens/Task';
+import Settings from './screens/Settings';
+import History from './screens/History';
+import StoragedTask from './screens/StoragedTask';
+import EditTemplate from './screens/EditTemplate';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +19,7 @@ export default () => {
 
     return (
         <>
-            <StatusBar style="light" />
+            <StatusBar style="light" translucent />
             <NavigationContainer>
                 <Stack.Navigator
                     initialRouteName="Home"
@@ -68,7 +68,7 @@ export default () => {
                             },
                             animation: 'slide_from_right',
                             headerRight: () => (
-                                <Text style={{ fontSize: 16, color: 'rgb(150, 150, 150)' }}>v1.0.5</Text>
+                                <Text style={{ fontSize: 16, color: 'rgb(150, 150, 150)' }}>v1.0.6</Text>
                             )
                         }}
                     />
