@@ -1,4 +1,4 @@
-export const datetime = (init, now) => {
+export const datetime = (init: string, now: string) => {
     const a = new Date(init);
     const b = new Date(now);
 

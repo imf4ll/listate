@@ -3,8 +3,9 @@ import { Switch, Animated, Easing } from 'react-native';
 import { reloadAsync } from 'expo-updates';
 import { useState, useEffect, useRef } from 'react';
 import { ThemeProvider } from 'styled-components';
-import useTheme from '../../hooks/useTheme';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
+import { useTheme } from '../../hooks/useTheme';
 import {
     Container, Section, TitleSection,
     Setting, TitleSetting, IconSetting,
@@ -12,12 +13,13 @@ import {
     TitleButton,
 } from './styles';
 
-export default ({ navigation }) => {
-    const [ isEnabled, setIsEnabled ] = useState(false);
+export const Settings = ({ navigation }) => {
+    const [ isEnabled, setIsEnabled ] = useState<boolean>(false);
     const translate = useRef(new Animated.Value(500)).current;
     const scaleIcons = useRef(new Animated.Value(1)).current;
     const theme = useTheme();
 
+    // @ts-ignore
     useEffect(async () => {
         const theme = await AsyncStorage.getItem('theme');
         theme === 'dark' ? setIsEnabled(true) : setIsEnabled(false);

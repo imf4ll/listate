@@ -3,8 +3,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeProvider } from 'styled-components';
 import { Image, Animated, Vibration } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import useTheme from '../../hooks/useTheme';
-import Menu from '../../components/Menu';
+
+import { useTheme } from '../../hooks/useTheme';
+import { ITemplate } from '../../types';
+import { Menu } from '../../components/Menu';
 import {
     Container, Scroll, Template,
     TitleTemplate, Item, TitleItem,
@@ -13,13 +15,14 @@ import {
 
 import Empty from '../../assets/none.png';
 
-export default ({ navigation }) => {
-    const [ templates, setTemplates ] = useState([]);
+export const Home = ({ navigation }) => {
+    const [ templates, setTemplates ] = useState<Array<ITemplate>>([]);
     const translate = useRef(new Animated.Value(100)).current;
     const fadeIn = useRef(new Animated.Value(0)).current;
     const isFocused = useIsFocused();
     const theme = useTheme();
 
+    // @ts-ignore
     useEffect(async () => {
         Animated.parallel([
             Animated.timing(translate, {
@@ -37,6 +40,7 @@ export default ({ navigation }) => {
 
     }, []);
     
+    // @ts-ignore
     useEffect(async () => {
         const templates = JSON.parse(await AsyncStorage.getItem('templates'));
 
@@ -47,14 +51,15 @@ export default ({ navigation }) => {
 
     }, [ window.onload, isFocused ]);
 
-    const handleTask = id =>
+    const handleTask = (id: string) => {
         navigation.navigate('Task', {
             params: {
                 id,
             }
         });
+    }
 
-    const handleEdit = id => {
+   const handleEdit = (id: string) => {
         Vibration.vibrate(50);
 
         navigation.navigate('EditTemplate', {

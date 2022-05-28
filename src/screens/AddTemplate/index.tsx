@@ -1,30 +1,31 @@
 import { useEffect, useState, useRef } from 'react';
-import { Animated, Vibration } from 'react-native';
+import { Animated, ScrollView, Vibration } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { v4 as uuid } from 'uuid';
 import { ThemeProvider } from 'styled-components';
 import Toast from 'react-native-simple-toast';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import useTheme from '../../hooks/useTheme';
+import { useTheme } from '../../hooks/useTheme';
+import { IItem } from '../../types';
 import { 
     Container, NameInput, Tasks,
     Task, Item, AddInput,
     AddNumberInput, Button,
 } from './styles';
 
-export default ({ navigation }) => {
+export const AddTemplate = ({ navigation }) => {
     const translateInputs = useRef(new Animated.Value(-250)).current;
     const translateScroll = useRef(new Animated.Value(-500)).current;
     const widthFocused = useRef(new Animated.Value(100)).current;
-    const tasksRef = useRef();
-    const [ itemsRef, setItemsRef ] = useState([]);
-    const [ deleteRef, setDeleteRef ] = useState([]);
-    const [ inputFocused, setInputFocused ] = useState(false);
-    const [ name, setName ] = useState('');
+    const tasksRef = useRef<ScrollView>();
+    const [ itemsRef, setItemsRef ] = useState(null);
+    const [ deleteRef, setDeleteRef ] = useState(null);
+    const [ inputFocused, setInputFocused ] = useState<boolean>(false);
+    const [ name, setName ] = useState<string>();
     const [ items, setItems ] = useState([]);
     const theme = useTheme();
-    const phcolor = "rgb(160, 160, 160)";
+    const phcolor = 'rgb(160, 160, 160)';
 
     useEffect(() => {
         Animated.parallel([
@@ -35,7 +36,6 @@ export default ({ navigation }) => {
             }),
             Animated.spring(translateScroll, {
                 toValue: 0,
-                duration: 750,
                 useNativeDriver: true,
                 delay: 250,
             }),
@@ -59,14 +59,12 @@ export default ({ navigation }) => {
         if (inputFocused) {
             Animated.spring(widthFocused, {
                 toValue: 300,
-                duration: 500,
                 useNativeDriver: false,
             }).start();
         
         } else {
             Animated.spring(widthFocused, {
                 toValue: 150,
-                duration: 500,
                 useNativeDriver: false,
             }).start();
 
@@ -75,10 +73,9 @@ export default ({ navigation }) => {
     }, [ inputFocused ]);
 
     useEffect(() => {
-        if (itemsRef.length !== 0) {
+        if (itemsRef !== null && itemsRef.length !== 0) {
             Animated.spring(itemsRef[itemsRef.length - 1], {
                 toValue: 0,
-                duration: 1000,
                 useNativeDriver: false,
             }).start();
         }
@@ -142,7 +139,7 @@ export default ({ navigation }) => {
         setItemsRef([ ...itemsRef, new Animated.Value(-500) ]);
     }
 
-    const handleDeleteTask = id => {
+    const handleDeleteTask = (id : number) => {
         Vibration.vibrate(50);
 
         Animated.timing(deleteRef[id], {
@@ -150,7 +147,7 @@ export default ({ navigation }) => {
             duration: 250,
             useNativeDriver: false,
         }).start(({ finished }) => {
-            setItems(items.filter(i => i.id !== id).map((i, k) => {
+            setItems(items.filter((i: IItem) => i.id !== id).map((i: IItem, k: number) => {
                 return {
                     id: k,
                     item: i.item,
@@ -160,8 +157,8 @@ export default ({ navigation }) => {
                 }
             }));
 
-            setItemsRef(itemsRef.filter((_, k) => k !== id));
-            setDeleteRef(deleteRef.filter((_, k) => k !== id));
+            setItemsRef(itemsRef.filter((_: IItem, k: number) => k !== id));
+            setDeleteRef(deleteRef.filter((_: IItem, k: number) => k !== id));
 
             finished &&
                 Animated.timing(deleteRef[id], {
@@ -172,9 +169,9 @@ export default ({ navigation }) => {
         });
     }
 
-    const handleInput = (text, i) => items[i].item = text;
+    const handleInput = (text: string, i: number) => items[i].item = text;
 
-    const handleNumberInput = (text, i) => items[i].quantity = parseInt(text);
+    const handleNumberInput = (text: string, i: number) => items[i].quantity = parseInt(text);
 
     const handleSave = async () => {
         const template = await AsyncStorage.getItem('templates');
@@ -192,7 +189,7 @@ export default ({ navigation }) => {
             return
         }
 
-        if (items.filter(i => i.item === '').length !== 0) {
+        if (items.filter((i: IItem) => i.item === '').length !== 0) {
             Toast.show('Items name cannot be empty.', Toast.SHORT);
 
             return
@@ -208,7 +205,7 @@ export default ({ navigation }) => {
         } else {
             const templateParsed = JSON.parse(template);
 
-            await AsyncStorage.setItem('templates', JSON.stringify([...templateParsed.map(i => i), {
+            await AsyncStorage.setItem('templates', JSON.stringify([...templateParsed.map((i: IItem) => i), {
                 id: uuid(),
                 name,
                 items,
@@ -218,6 +215,8 @@ export default ({ navigation }) => {
         Toast.show('Created successfully', Toast.SHORT);
         navigation.goBack();
     }
+
+    const scrollToEnd = () => tasksRef.current.scrollToEnd({ animated: true, });
 
     return (
         <ThemeProvider theme={ theme }>
@@ -234,11 +233,11 @@ export default ({ navigation }) => {
                     ref={ tasksRef }
                     showsVerticalScrollIndicator={ false }
                     style={{ transform: [{ translateX: translateScroll }] }}
-                    onContentSizeChange={ () => tasksRef.current.scrollToEnd({ animated: true, }) }
+                    onContentSizeChange={ scrollToEnd }
                 >
                     <Task>
                         { 
-                            items.map((i, k) => (
+                            items !== null && items.map((i: IItem, k: number) => (
                                 <Item
                                     key={ k }
                                     style={{ transform: [{ translateX: itemsRef[k] }, { scale: deleteRef[k] }] }}
@@ -248,13 +247,13 @@ export default ({ navigation }) => {
                                         placeholder="Item name"
                                         defaultValue={ i.item }
                                         placeholderTextColor={ phcolor }
-                                        onChangeText={ t => handleInput(t, k) }
+                                        onChangeText={ (t: string) => handleInput(t, k) }
                                     />
                                     <AddNumberInput
                                         placeholder="0"
                                         placeholderTextColor={ phcolor }
                                         keyboardType="numeric"
-                                        onChangeText={ t => handleNumberInput(t, k) }
+                                        onChangeText={ (t: string) => handleNumberInput(t, k) }
                                         defaultValue={ `${ i.quantity }` }
                                     />
                                 </Item>

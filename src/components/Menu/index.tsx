@@ -2,11 +2,12 @@ import { Animated, Vibration } from 'react-native';
 import { useRef, useState, useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import useTheme from '../../hooks/useTheme';
-import { Container, Menu, MenuIcon } from './styles';
 
-export default ({ navigation }) => {
-    const [ menuOpen, setMenuOpen ] = useState(false);
+import { useTheme } from '../../hooks/useTheme';
+import { Container, MenuView, MenuIcon } from './styles';
+
+export const Menu = ({ navigation }) => {
+    const [ menuOpen, setMenuOpen ] = useState<boolean>(false);
     const translateButton = useRef(new Animated.Value(250)).current;
     const translateMenu = useRef(new Animated.Value(0)).current;
     const theme = useTheme();
@@ -16,7 +17,7 @@ export default ({ navigation }) => {
             toValue: 0,
             duration: 500,
             useNativeDriver: true,
-        }).start();
+        }).start()
 
     }, []);
 
@@ -67,7 +68,7 @@ export default ({ navigation }) => {
     return (
         <ThemeProvider theme={ theme }> 
             <Container>
-                <Menu style={{ transform: [{ translateY: translateMenu }] }}>
+                <MenuView style={{ transform: [{ translateY: translateMenu }] }}>
                     <MenuIcon
                         style={{ transform: [{ translateX: translateButton }] }}
                         onPress={ menuOpen ? handleLongPress : handleTemplate }
@@ -117,7 +118,7 @@ export default ({ navigation }) => {
                             color="white"
                         />
                     </MenuIcon>
-                </Menu>
+                </MenuView>
             </Container>
         </ThemeProvider>
     );

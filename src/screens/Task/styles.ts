@@ -11,7 +11,7 @@ export const Container = styled.View`
     padding-bottom: 5%;
 `;
 
-export const Task = styled.View`
+export const TaskView = styled.View`
     width: 100%;
     align-items: center;
 `;

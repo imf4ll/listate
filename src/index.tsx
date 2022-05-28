@@ -2,20 +2,20 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
-import useTheme from './hooks/useTheme';
 
-import Home from './screens/Home';
-import AddTemplate from './screens/AddTemplate';
-import Task from './screens/Task';
-import Settings from './screens/Settings';
-import History from './screens/History';
-import StoragedTask from './screens/StoragedTask';
-import EditTemplate from './screens/EditTemplate';
+import { useTheme } from './hooks/useTheme';
 
-const Stack = createNativeStackNavigator();
+import { Home } from './screens/Home';
+import { AddTemplate } from './screens/AddTemplate';
+import { Task } from './screens/Task';
+import { Settings } from './screens/Settings';
+import { History } from './screens/History';
+import { StoragedTask } from './screens/StoragedTask';
+import { EditTemplate } from './screens/EditTemplate';
 
-export default () => {
+export const Listate = () => {
     const theme = useTheme();
+    const Stack = createNativeStackNavigator();
 
     return (
         <>
@@ -68,7 +68,7 @@ export default () => {
                             },
                             animation: 'slide_from_right',
                             headerRight: () => (
-                                <Text style={{ fontSize: 16, color: 'rgb(150, 150, 150)' }}>v1.0.6</Text>
+                                <Text style={{ fontSize: 16, color: 'rgb(150, 150, 150)' }}>v1.0.7</Text>
                             )
                         }}
                     />

@@ -6,8 +6,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-simple-toast';
 
-import useTheme from '../../hooks/useTheme';
+import { useTheme } from '../../hooks/useTheme';
 import { datetime } from '../../utils/datetime';
+import { IItem, ITask } from '../../types';
 import {
     Container, Tasks, Task,
     Title, Checks, Check,
@@ -16,8 +17,8 @@ import {
 
 import Empty from '../../assets/empty.png';
 
-export default ({ navigation }) => {
-    const [ tasks, setTasks ] = useState([]);
+export const History = ({ navigation }) => {
+    const [ tasks, setTasks ] = useState<Array<ITask>>(null);
     const translate = useRef(new Animated.Value(500)).current;
     const isFocused = useIsFocused();
     const theme = useTheme();
@@ -32,6 +33,7 @@ export default ({ navigation }) => {
 
     }, []);
 
+    // @ts-ignore
     useEffect(async () => {
         const tasks = JSON.parse(await AsyncStorage.getItem('history'));
 
@@ -42,14 +44,16 @@ export default ({ navigation }) => {
 
     }, [ window.onload, isFocused ]);
 
-    const handleTask = id =>
+    const handleTask = (id: string) => {
         navigation.navigate('StoragedTask', {
             params: {
                 id,
             }
         });
+    
+    }
 
-    const handleShowFullTime = timestamp => {
+    const handleShowFullTime = (timestamp: string) => {
         Vibration.vibrate(50);
 
         Toast.show(new Date(timestamp).toString(), Toast.SHORT);
@@ -82,7 +86,7 @@ export default ({ navigation }) => {
                                     <Title>{ i.task.name }</Title>
                                     <Checks>
                                         {
-                                            i.task.items.map((i, k) => (
+                                            i.task.items.map((i: IItem, k: number) => (
                                                 <Check key={ k }>
                                                     <Icon
                                                         name={ i.checked ? "check-box" : "check-box-outline-blank" }
@@ -95,7 +99,7 @@ export default ({ navigation }) => {
                                             ))
                                         }
                                     </Checks>
-                                    <Time>{ datetime(i.timestamp, new Date()) }</Time>
+                                    <Time>{ datetime(i.timestamp, new Date().toString()) }</Time>
                                 </Task>
                             ))
                         }

@@ -9,7 +9,7 @@ export const Container = styled.View`
     right: 15px;
 `;
 
-export const Menu = styled(Animated.View)`
+export const MenuView = styled(Animated.View)`
     flex-direction: column;
 `;
 

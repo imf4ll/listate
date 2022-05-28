@@ -2,8 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from 'react';
 import { dark, light } from '../themes';
 
-export default () => {
-    const [ theme, setTheme ] = useState('dark');
+export const useTheme = () => {
+    const [ theme, setTheme ] = useState<string>('dark');
 
     (async () => {
         const theme = await AsyncStorage.getItem('theme');

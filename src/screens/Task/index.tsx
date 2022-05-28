@@ -2,13 +2,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeProvider } from 'styled-components';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useState, useEffect, useRef } from 'react';
-import { Image, Animated, Easing, Vibration } from 'react-native';
+import { Image, Animated, Easing, Vibration, ScrollView } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import { v4 as uuid } from 'uuid';
-import useTheme from '../../hooks/useTheme';
-import ProgressBar from '../../components/ProgressBar';
+
+import { useTheme } from '../../hooks/useTheme';
+import { ProgressBar } from '../../components/ProgressBar';
+import { ITaskSingle } from '../../types';
 import {
-    Container, Task, Observation,
+    Container, TaskView, Observation,
     None, TitleOver, Items,
     Item, Information, Title,
     Quantity, Sides, Button,
@@ -17,25 +19,26 @@ import {
 
 import Anymore from '../../assets/anymore.png';
 
-export default ({ navigation, route }) => {
+export const Task = ({ navigation, route }) => {
     const translateItems = useRef(new Animated.Value(-500)).current;
     const translateButtons = useRef(new Animated.Value(2000)).current;
     const translateDone = useRef(new Animated.Value(2000)).current;
     const translateNone = useRef(new Animated.Value(0)).current;
     const translateObservation = useRef(new Animated.Value(-250)).current;
     const scaleOver = useRef(new Animated.Value(1)).current;
-    const itemsScroll = useRef();
-    const [ itemsRef, setItemsRef ] = useState([]);
-    const [ observation, setObservation ] = useState('');
-    const [ current, setCurrent ] = useState(0);
-    const [ task, setTask ] = useState({});
-    const [ over, setOver ] = useState(false);
+    const itemsScroll = useRef<ScrollView>();
+    const [ itemsRef, setItemsRef ] = useState(null);
+    const [ observation, setObservation ] = useState<string>();
+    const [ current, setCurrent ] = useState<number>(0);
+    const [ task, setTask ] = useState<ITaskSingle>();
+    const [ over, setOver ] = useState<boolean>(false);
     const { id } = route.params.params;
     const theme = useTheme();
-    
+  
+    // @ts-ignore
     useEffect(async () => {
         const templates = await AsyncStorage.getItem('templates');
-        const task = JSON.parse(templates).filter(i => i.id === id)[0];
+        const task = JSON.parse(templates).filter((i: ITaskSingle) => i.id === id)[0];
 
         navigation.setOptions({
             title: task.name,
@@ -44,7 +47,6 @@ export default ({ navigation, route }) => {
         Animated.parallel([
             Animated.spring(translateItems, {
                 toValue: 0,
-                duration: 500,
                 useNativeDriver: true,
                 delay: 500,
             }),
@@ -66,10 +68,9 @@ export default ({ navigation, route }) => {
     }, []);
 
     useEffect(() => {
-        if (task.items !== undefined) {
+        if (task && task.items) {
             Animated.spring(itemsRef[itemsRef.length - 1], {
                 toValue: 0,
-                duration: 500,
                 useNativeDriver: false,
             }).start();
         }
@@ -77,7 +78,7 @@ export default ({ navigation, route }) => {
     });
 
     useEffect(() => {
-        if (task.items !== undefined) {
+        if (task && task.items) {
             Animated.parallel([
                 Animated.timing(translateObservation, {
                     toValue: 0,
@@ -128,7 +129,7 @@ export default ({ navigation, route }) => {
         setItemsRef([ ...itemsRef, new Animated.Value(-500) ]);
     }
 
-    const handleAdd = id => {
+    const handleAdd = (id: number) => {
         Vibration.vibrate(50);
         
         const i = task.items[id];
@@ -141,7 +142,7 @@ export default ({ navigation, route }) => {
         }
     }
 
-    const handleRemove = id => {
+    const handleRemove = (id: number) => {
         Vibration.vibrate(50);
         
         const t = task.items[id];
@@ -170,7 +171,7 @@ export default ({ navigation, route }) => {
         } else {
             const historyParsed = JSON.parse(history);
 
-            await AsyncStorage.setItem('history', JSON.stringify([...historyParsed.map(i => i), {
+            await AsyncStorage.setItem('history', JSON.stringify([...historyParsed.map((i: ITaskSingle) => i), {
                 task,
                 observation,
                 id: uuid(),
@@ -187,12 +188,12 @@ export default ({ navigation, route }) => {
         <ThemeProvider theme={ theme }>
             <Container>
                 {
-                    task.items !== undefined && !over &&
+                    task && !over &&
                         <ProgressBar
                             progress={ current / task.items.length }
                         />
                 }
-                <Task>
+                <TaskView>
                     {
                         over
                         ?
@@ -241,7 +242,7 @@ export default ({ navigation, route }) => {
                                 onContentSizeChange={ () => itemsScroll.current.scrollToEnd({ animated: true }) }
                             >
                                 {
-                                    task.items !== undefined && task.items.filter((_, k) => k <= current).map((i, k) => (
+                                    task && task.items.filter((_, k) => k <= current).map((i, k) => (
                                         <Item
                                             key={ k }
                                             style={{ transform: [{ translateX: itemsRef[k] }] }}
@@ -267,7 +268,7 @@ export default ({ navigation, route }) => {
                                 }
                             </Items>
                     }
-                </Task>
+                </TaskView>
                     {
                         !over &&
                             <>
@@ -282,7 +283,6 @@ export default ({ navigation, route }) => {
                                         }}
                                     >
                                         <Icon
-                                            backgroundColor="transparent"
                                             name="remove"
                                             color={ theme.primary }
                                             size={ 35 }
@@ -298,7 +298,6 @@ export default ({ navigation, route }) => {
                                         }}
                                     >
                                         <Icon
-                                            backgroundColor="transparent"
                                             color={ theme.primary }
                                             name="add"
                                             size={ 35 }
