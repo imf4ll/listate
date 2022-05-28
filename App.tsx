@@ -3,17 +3,17 @@ import { Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 
-import { useTheme } from './hooks/useTheme';
+import { useTheme } from './src/hooks/useTheme';
 
-import { Home } from './screens/Home';
-import { AddTemplate } from './screens/AddTemplate';
-import { Task } from './screens/Task';
-import { Settings } from './screens/Settings';
-import { History } from './screens/History';
-import { StoragedTask } from './screens/StoragedTask';
-import { EditTemplate } from './screens/EditTemplate';
+import { Home } from './src/screens/Home';
+import { AddTemplate } from './src/screens/AddTemplate';
+import { Task } from './src/screens/Task';
+import { Settings } from './src/screens/Settings';
+import { History } from './src/screens/History';
+import { StoragedTask } from './src/screens/StoragedTask';
+import { EditTemplate } from './src/screens/EditTemplate';
 
-export const Listate = () => {
+export default () => {
     const theme = useTheme();
     const Stack = createNativeStackNavigator();
 

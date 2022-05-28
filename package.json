@@ -1,7 +1,6 @@
 {
   "name": "listate",
   "version": "1.0.7",
-  "main": "index.ts",
   "scripts": {
     "start": "expo start --dev-client",
     "eject": "expo eject",
