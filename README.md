@@ -7,10 +7,6 @@
 - An app to create and manage items checklists, like supermarket lists, completely **OFFLINE**.
 
 &nbsp;
-## ♻️ Changelog v1.0.7
-- Transcribed to TypeScript
-
-&nbsp;
 ## 🔧 Setup:
 - Clone this repository:<br>
 `git clone https://github.com/z3oxs/listate` or Download ZIP and unzip;<br><br>
