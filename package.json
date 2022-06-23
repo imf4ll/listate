@@ -1,7 +1,7 @@
 {
   "name": "listate",
   "version": "1.0.8",
-  "main": "./node_modules/expo/AppEntry.js",
+  "main": "index.js",
   "scripts": {
     "start": "expo start --dev-client",
     "eject": "expo eject",
