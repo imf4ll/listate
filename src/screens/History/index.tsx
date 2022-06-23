@@ -16,12 +16,14 @@ import {
 } from './styles';
 
 import Empty from '../../assets/empty.png';
+import {useLang} from '../../hooks/useLang';
 
 export const History = ({ navigation }) => {
     const [ tasks, setTasks ] = useState<Array<ITask>>(null);
     const translate = useRef(new Animated.Value(500)).current;
     const isFocused = useIsFocused();
     const theme = useTheme();
+    const lang = useLang();
 
     useEffect(() => {
         Animated.timing(translate, {
@@ -63,60 +65,64 @@ export const History = ({ navigation }) => {
         <ThemeProvider theme={ theme }>
             <Container>
                 { 
-                    tasks !== null && tasks.length !== 0
-                    ?
-                    <Tasks
-                        showsVerticalScrollIndicator={ false }
-                        contentContainerStyle={{ alignItems: 'center' }}
-                        style={{ transform: [{ translateX: translate }] }}
-                    >
-                        {
-                            tasks.reverse().map((i, k) => (
-                                <Task
-                                    key={ k }
-                                    onPress={ () => handleTask(i.id) }
-                                    android_ripple={{
-                                        color: theme.Header.ripple,
-                                        borderless: false,
-                                        radius: 500,
-                                        foreground: true,
+                    tasks !== null 
+                        ?
+                        tasks.length !== 0
+                            ?
+                            <Tasks
+                                showsVerticalScrollIndicator={ false }
+                                contentContainerStyle={{ alignItems: 'center' }}
+                                style={{ transform: [{ translateX: translate }] }}
+                            >
+                                {
+                                    tasks.reverse().map((i, k) => (
+                                        <Task
+                                            key={ k }
+                                            onPress={ () => handleTask(i.id) }
+                                            android_ripple={{
+                                                color: theme.Header.ripple,
+                                                borderless: false,
+                                                radius: 500,
+                                                foreground: true,
+                                            }}
+                                            onLongPress={ () => handleShowFullTime(i.timestamp) }
+                                        >
+                                            <Title>{ i.task.name }</Title>
+                                            <Checks>
+                                                {
+                                                    i.task.items.map((i: IItem, k: number) => (
+                                                        <Check key={ k }>
+                                                            <Icon
+                                                                name={ i.checked ? "check-box" : "check-box-outline-blank" }
+                                                                size={ 20 }
+                                                                color={ theme.primary }
+                                                                style={{ marginHorizontal: 5 }}
+                                                            />
+                                                            <TitleCheck>{ i.item } ({ i.total }/{ i.quantity })</TitleCheck>
+                                                        </Check>
+                                                    ))
+                                                }
+                                            </Checks>
+                                            <Time>{ datetime(i.timestamp, new Date().toString()) }</Time>
+                                        </Task>
+                                    ))
+                                }
+                            </Tasks>
+                            :
+                            <>
+                                <Image
+                                    source={ Empty }
+                                    style={{
+                                        width: 300,
+                                        height: 300,
                                     }}
-                                    onLongPress={ () => handleShowFullTime(i.timestamp) }
-                                >
-                                    <Title>{ i.task.name }</Title>
-                                    <Checks>
-                                        {
-                                            i.task.items.map((i: IItem, k: number) => (
-                                                <Check key={ k }>
-                                                    <Icon
-                                                        name={ i.checked ? "check-box" : "check-box-outline-blank" }
-                                                        size={ 20 }
-                                                        color={ theme.primary }
-                                                        style={{ marginHorizontal: 5 }}
-                                                    />
-                                                    <TitleCheck>{ i.item } ({ i.total }/{ i.quantity })</TitleCheck>
-                                                </Check>
-                                            ))
-                                        }
-                                    </Checks>
-                                    <Time>{ datetime(i.timestamp, new Date().toString()) }</Time>
-                                </Task>
-                            ))
-                        }
-                    </Tasks>
-                    :
-                    <>
-                        <Image
-                            source={ Empty }
-                            style={{
-                                width: 300,
-                                height: 300,
-                            }}
-                        />
-                        <TitleNoOne>
-                            Your history is empty, try to save a new task through a template.
-                        </TitleNoOne>
-                    </>
+                                />
+                                <TitleNoOne>
+                                    { lang.historyempty }
+                                </TitleNoOne>
+                            </>
+                        :
+                            <></>
                 }
             </Container>
         </ThemeProvider>

@@ -18,6 +18,7 @@ import {
 } from './styles';
 
 import Anymore from '../../assets/anymore.png';
+import {useLang} from '../../hooks/useLang';
 
 export const Task = ({ navigation, route }) => {
     const translateItems = useRef(new Animated.Value(-500)).current;
@@ -34,6 +35,7 @@ export const Task = ({ navigation, route }) => {
     const [ over, setOver ] = useState<boolean>(false);
     const { id } = route.params.params;
     const theme = useTheme();
+    const lang = useLang();
   
     // @ts-ignore
     useEffect(async () => {
@@ -180,7 +182,7 @@ export const Task = ({ navigation, route }) => {
 
         }
 
-        Toast.show('Saved successfully', Toast.SHORT);
+        Toast.show(lang.savedSuccess, Toast.SHORT);
         navigation.goBack();
     }
 
@@ -199,7 +201,7 @@ export const Task = ({ navigation, route }) => {
                         ?
                             <>
                                 <Observation
-                                    placeholder="Observation"
+                                    placeholder={ lang.observation }
                                     placeholderTextColor="rgb(160, 160, 160)"
                                     onChangeText={ setObservation }
                                     style={{ transform: [{ translateY: translateObservation }] }}
@@ -214,7 +216,7 @@ export const Task = ({ navigation, route }) => {
                                             height: 300,
                                         }}
                                     />
-                                    <TitleOver>You don't have anymore task :)</TitleOver>
+                                    <TitleOver>{ lang.noAnymore }</TitleOver>
                                     <Button
                                         onPress={ handleDone }
                                         android_ripple={{

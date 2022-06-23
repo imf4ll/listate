@@ -4,6 +4,7 @@ import { reloadAsync } from 'expo-updates';
 import { useState, useEffect, useRef } from 'react';
 import { ThemeProvider } from 'styled-components';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import RNPickerSelect from 'react-native-picker-select';
 
 import { useTheme } from '../../hooks/useTheme';
 import {
@@ -12,18 +13,24 @@ import {
     Title, Button, TitleSectionText,
     TitleButton,
 } from './styles';
+import {useLang} from '../../hooks/useLang';
 
 export const Settings = ({ navigation }) => {
     const [ isEnabled, setIsEnabled ] = useState<boolean>(false);
+    const [ lang, setLang ] = useState<string | null>("");
     const translate = useRef(new Animated.Value(500)).current;
     const scaleIcons = useRef(new Animated.Value(1)).current;
     const theme = useTheme();
+    const language = useLang();
 
     // @ts-ignore
     useEffect(async () => {
         const theme = await AsyncStorage.getItem('theme');
         theme === 'dark' ? setIsEnabled(true) : setIsEnabled(false);
 
+        const lang = await AsyncStorage.getItem('lang');
+        setLang(lang);
+      
         Animated.parallel([
             Animated.timing(translate, {
                 toValue: 0,
@@ -68,10 +75,17 @@ export const Settings = ({ navigation }) => {
     }
 
     const handleSwitch = async () => {
-        await reloadAsync();
         await AsyncStorage.setItem('theme', isEnabled ? 'light' : 'dark');
         
         setIsEnabled(!isEnabled);
+        await reloadAsync();
+    }
+    
+    const handleLang = async (v: string) => {
+        setLang(v);
+       
+        await AsyncStorage.setItem('lang', v);
+        await reloadAsync();
     }
 
     return (
@@ -86,7 +100,7 @@ export const Settings = ({ navigation }) => {
                         size={ 30 }
                         style={{ marginRight: 10 }}
                     />
-                    <TitleSectionText>Tasks</TitleSectionText>
+                    <TitleSectionText>{ language.tasks }</TitleSectionText>
                 </TitleSection>
                 <Section
                     style={{ transform: [{ translateX: translate }] }}
@@ -97,10 +111,10 @@ export const Settings = ({ navigation }) => {
                                 name="update-disabled"
                                 style={{ transform: [{ scale: scaleIcons }] }}
                             />
-                            <Title>Clear history</Title>
+                            <Title>{ language.clearhist }</Title>
                         </TitleSetting>
                         <Button onPress={ handleHistory } activeOpacity={ 0.7 }>
-                            <TitleButton>Clear</TitleButton>
+                            <TitleButton>{ language.clearText }</TitleButton>
                         </Button>
                     </Setting>
                     <Setting>
@@ -109,10 +123,10 @@ export const Settings = ({ navigation }) => {
                                 name="unpublished"
                                 style={{ transform: [{ scale: scaleIcons }] }}
                             />
-                            <Title>Clear templates</Title>
+                            <Title>{ language.cleartempls }</Title>
                         </TitleSetting>
                         <Button onPress={ handleTemplates } activeOpacity={ 0.7 }>
-                            <TitleButton>Clear</TitleButton>
+                            <TitleButton>{ language.clearText }</TitleButton>
                         </Button>
                     </Setting>
                     <Setting>
@@ -121,10 +135,10 @@ export const Settings = ({ navigation }) => {
                                 name="local-fire-department"
                                 style={{ transform: [{ scale: scaleIcons }] }}
                             />
-                            <Title>Wipe</Title>
+                            <Title>{ language.wipe }</Title>
                         </TitleSetting>
                         <Button onPress={ handleWipe } activeOpacity={ 0.7 }>
-                            <TitleButton>Wipe</TitleButton>
+                            <TitleButton>{ language.wipeText }</TitleButton>
                         </Button>
                     </Setting>
                 </Section>
@@ -137,7 +151,7 @@ export const Settings = ({ navigation }) => {
                         size={ 30 }
                         style={{ marginRight: 10 }}
                     />
-                    <TitleSectionText>Appeareance</TitleSectionText>
+                    <TitleSectionText>{ language.appeareance }</TitleSectionText>
                 </TitleSection>
                 <Section
                     style={{ transform: [{ translateX: translate }] }}
@@ -148,7 +162,7 @@ export const Settings = ({ navigation }) => {
                                 name={ isEnabled ? "nights-stay" : "wb-sunny" }
                                 style={{ transform: [{ scale: scaleIcons }] }}
                             />
-                            <Title>Switch theme</Title>
+                            <Title>{ language.switch }</Title>
                         </TitleSetting>
                         <Switch
                             trackColor={{ true: "#444", false: "rgb(180, 180, 180)" }}
@@ -156,6 +170,25 @@ export const Settings = ({ navigation }) => {
                             onValueChange={ handleSwitch }
                             value={ isEnabled }
                         />
+                    </Setting>
+                    <Setting>
+                        <TitleSetting>
+                            <IconSetting
+                                name="language"
+                                style={{ transform: [{ scale: scaleIcons }] }}
+                            />
+                            <Title>{ language.lang }</Title>
+                        </TitleSetting>
+                        { /* @ts-ignore */ }
+                        <RNPickerSelect
+                            onValueChange={ v => handleLang(v) }
+                            items={[
+                                { label: 'English', value: 'EN' },
+                                { label: 'Português', value: 'PT' },
+                            ]}
+                        >
+                            <Title>{ lang }</Title>
+                        </RNPickerSelect>
                     </Setting>
                 </Section>
             </Container>

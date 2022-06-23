@@ -13,6 +13,7 @@ import {
     Task, Item, AddInput,
     AddNumberInput, Button,
 } from './styles';
+import {useLang} from '../../hooks/useLang';
 
 export const AddTemplate = ({ navigation }) => {
     const translateInputs = useRef(new Animated.Value(-250)).current;
@@ -25,6 +26,7 @@ export const AddTemplate = ({ navigation }) => {
     const [ name, setName ] = useState<string>();
     const [ items, setItems ] = useState([]);
     const theme = useTheme();
+    const lang = useLang();
     const phcolor = 'rgb(160, 160, 160)';
 
     useEffect(() => {
@@ -178,19 +180,19 @@ export const AddTemplate = ({ navigation }) => {
         Vibration.vibrate(50);
 
         if (items.length === 0) {
-            Toast.show('Items cannot be empty.', Toast.SHORT);
+            Toast.show(lang.emptyItem, Toast.SHORT);
 
             return
         }
 
         if (name === '') {
-            Toast.show('Template name cannot be empty.', Toast.SHORT);
+            Toast.show(lang.emptyTempName, Toast.SHORT);
 
             return
         }
 
         if (items.filter((i: IItem) => i.item === '').length !== 0) {
-            Toast.show('Items name cannot be empty.', Toast.SHORT);
+            Toast.show(lang.emptyItem, Toast.SHORT);
 
             return
         }
@@ -212,7 +214,7 @@ export const AddTemplate = ({ navigation }) => {
             }]));
         }
 
-        Toast.show('Created successfully', Toast.SHORT);
+        Toast.show(lang.createSuccess, Toast.SHORT);
         navigation.goBack();
     }
 
@@ -222,7 +224,7 @@ export const AddTemplate = ({ navigation }) => {
         <ThemeProvider theme={ theme }>
             <Container>
                 <NameInput
-                    placeholder="Name"
+                    placeholder={ lang.name }
                     placeholderTextColor={ phcolor }
                     onChangeText={ setName }
                     onFocus={ () => setInputFocused(true) }
@@ -244,7 +246,7 @@ export const AddTemplate = ({ navigation }) => {
                                     onLongPress={ () => handleDeleteTask(k) }
                                 >
                                     <AddInput
-                                        placeholder="Item name"
+                                        placeholder={ lang.itemName }
                                         defaultValue={ i.item }
                                         placeholderTextColor={ phcolor }
                                         onChangeText={ (t: string) => handleInput(t, k) }

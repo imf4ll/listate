@@ -11,12 +11,14 @@ import {
     Items, Item, Information,
     Title, Quantity, Input,
 } from './styles';
+import {useLang} from '../../hooks/useLang';
 
 export const StoragedTask = ({ navigation, route }) => {
     const [ t, setTask ] = useState<ITask>();
     const translateItems = useRef(new Animated.Value(-500)).current;
     const { id } = route.params.params;
     const theme = useTheme();
+    const lang = useLang();
 
     // @ts-ignore
     useEffect(async () => {
@@ -74,7 +76,7 @@ export const StoragedTask = ({ navigation, route }) => {
                         >
                             <Observation>
                                 <Input
-                                    value={ t.task !== null && t.observation !== '' ? t.observation : 'Observation' }
+                                    value={ t.task !== null && t.observation !== '' ? t.observation : lang.observation }
                                     placeholderTextColor="rgb(160, 160, 160)"
                                     editable={ false }
                                 />

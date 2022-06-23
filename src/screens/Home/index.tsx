@@ -5,6 +5,7 @@ import { Image, Animated, Vibration } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
 import { useTheme } from '../../hooks/useTheme';
+import { useLang } from '../../hooks/useLang';
 import { ITemplate } from '../../types';
 import { Menu } from '../../components/Menu';
 import {
@@ -16,11 +17,12 @@ import {
 import Empty from '../../assets/none.png';
 
 export const Home = ({ navigation }) => {
-    const [ templates, setTemplates ] = useState<Array<ITemplate>>([]);
+    const [ templates, setTemplates ] = useState<Array<ITemplate> | null>(null);
     const translate = useRef(new Animated.Value(100)).current;
     const fadeIn = useRef(new Animated.Value(0)).current;
     const isFocused = useIsFocused();
     const theme = useTheme();
+    const lang = useLang();
 
     // @ts-ignore
     useEffect(async () => {
@@ -73,60 +75,64 @@ export const Home = ({ navigation }) => {
         <ThemeProvider theme={ theme }>
             <Container>
                 { 
-                    templates !== null && templates.length !== 0
-                    ?
-                        <Scroll
-                            showsVerticalScrollIndicator={ false }
-                            contentContainerStyle={{ alignItems: 'center' }}
-                            style={{ transform: [{ translateY: translate }], opacity: fadeIn }}
-                        >
-                            {
-                                templates.map((i, k) => (
-                                    <Template
-                                        key={ k }
-                                        onPress={ () => handleTask(i.id) }
-                                        android_ripple={{
-                                            color: theme.Header.ripple,
-                                            borderless: false,
-                                            radius: 250,
-                                            foreground: false,
+                    templates !== null
+                        ?
+                        templates.length !== 0
+                            ?
+                                <Scroll
+                                    showsVerticalScrollIndicator={ false }
+                                    contentContainerStyle={{ alignItems: 'center' }}
+                                    style={{ transform: [{ translateY: translate }], opacity: fadeIn }}
+                                >
+                                    {
+                                        templates.map((i, k) => (
+                                            <Template
+                                                key={ k }
+                                                onPress={ () => handleTask(i.id) }
+                                                android_ripple={{
+                                                    color: theme.Header.ripple,
+                                                    borderless: false,
+                                                    radius: 250,
+                                                    foreground: false,
+                                                }}
+                                                onLongPress={ () => handleEdit(i.id) }
+                                            >
+                                                <TitleTemplate>{ i.name }</TitleTemplate>
+                                                {
+                                                    i.items.map((i, k) => (
+                                                        <Item key={ k }>
+                                                            <Checkmark name="check-box-outline-blank" size={ 20 } />
+                                                            <TitleItem>
+                                                                { i.item }
+                                                            </TitleItem>
+                                                        </Item>
+                                                    ))
+                                                }
+                                            </Template>
+                                        ))
+                                    }
+                                </Scroll>
+                            :
+                                <Animated.View
+                                    style={{
+                                        width: '100%',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <Image
+                                        source={ Empty }
+                                        style={{
+                                            width: 300,
+                                            height: 300,
                                         }}
-                                        onLongPress={ () => handleEdit(i.id) }
-                                    >
-                                        <TitleTemplate>{ i.name }</TitleTemplate>
-                                        {
-                                            i.items.map((i, k) => (
-                                                <Item key={ k }>
-                                                    <Checkmark name="check-box-outline-blank" size={ 20 } />
-                                                    <TitleItem>
-                                                        { i.item }
-                                                    </TitleItem>
-                                                </Item>
-                                            ))
-                                        }
-                                    </Template>
-                                ))
-                            }
-                        </Scroll>
-                    :
-                        <Animated.View
-                            style={{
-                                width: '100%',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            <Image
-                                source={ Empty }
-                                style={{
-                                    width: 300,
-                                    height: 300,
-                                }}
-                            />
-                            <TitleNoOne>
-                                You don't have any template storaged, try to create a new one.
-                            </TitleNoOne>
-                        </Animated.View>
+                                    />
+                                    <TitleNoOne>
+                                        { lang.noone }
+                                    </TitleNoOne>
+                                </Animated.View>
+                        :
+                            <></>
                 }
                 <Menu navigation={ navigation } />
             </Container>

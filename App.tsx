@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 
 import { useTheme } from './src/hooks/useTheme';
+import { useLang } from './src/hooks/useLang';
 
 import { Home } from './src/screens/Home';
 import { AddTemplate } from './src/screens/AddTemplate';
@@ -15,6 +16,7 @@ import { EditTemplate } from './src/screens/EditTemplate';
 
 export default () => {
     const theme = useTheme();
+    const lang = useLang();
     const Stack = createNativeStackNavigator();
 
     return (
@@ -35,7 +37,7 @@ export default () => {
                         name="Template"
                         component={ AddTemplate }
                         options={{
-                            title: 'New',
+                            title: lang.templateTitle,
                             headerTitleAlign: 'left',
                             headerTintColor: theme.primary,
                             headerStyle: {
@@ -61,6 +63,7 @@ export default () => {
                         name="Settings"
                         component={ Settings }
                         options={{
+                            title: lang.settingsTitle,
                             headerTitleAlign: 'left',
                             headerTintColor: theme.primary,
                             headerStyle: {
@@ -68,7 +71,7 @@ export default () => {
                             },
                             animation: 'slide_from_right',
                             headerRight: () => (
-                                <Text style={{ fontSize: 16, color: 'rgb(150, 150, 150)' }}>v1.0.7</Text>
+                                <Text style={{ fontSize: 16, color: 'rgb(150, 150, 150)' }}>v1.0.8</Text>
                             )
                         }}
                     />
@@ -76,6 +79,7 @@ export default () => {
                         name="History"
                         component={ History }
                         options={{
+                            title: lang.historyTitle,
                             headerTitleAlign: 'left',
                             headerTintColor: theme.primary,
                             headerStyle: {
@@ -101,7 +105,7 @@ export default () => {
                         name="EditTemplate"
                         component={ EditTemplate }
                         options={{
-                            title: 'Edit',
+                            title: lang.editTemplTitle,
                             headerTitleAlign: 'left',
                             headerTintColor: theme.primary,
                             headerStyle: {

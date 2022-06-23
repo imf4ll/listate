@@ -12,6 +12,7 @@ import {
     Item, AddInput, AddNumberInput,
     Button,
 } from './styles';
+import {useLang} from '../../hooks/useLang';
 
 export const EditTemplate = ({ navigation, route }) => {
     const translateInputs = useRef(new Animated.Value(-250)).current;
@@ -23,6 +24,7 @@ export const EditTemplate = ({ navigation, route }) => {
     const [ template, setTemplate ] = useState<ITaskSingle>();
     const { id } = route.params.params;
     const theme = useTheme();
+    const lang = useLang();
     const phcolor = "rgb(160, 160, 160)";
 
     // @ts-ignore
@@ -226,19 +228,19 @@ export const EditTemplate = ({ navigation, route }) => {
         Vibration.vibrate(50);
 
         if (template.items.length === 0) {
-            Toast.show('Items cannot be empty.', Toast.SHORT);
+            Toast.show(lang.emptyItem, Toast.SHORT);
 
             return
         }
 
         if (template.name === '') {
-            Toast.show('Template name cannot be empty.', Toast.SHORT);
+            Toast.show(lang.emptyTempName, Toast.SHORT);
 
             return
         }
 
         if (template.items.filter((i: IItem) => i.item === '').length !== 0) {
-            Toast.show('Items name cannot be empty.', Toast.SHORT);
+            Toast.show(lang.emptyItem, Toast.SHORT);
 
             return
         }
@@ -253,7 +255,7 @@ export const EditTemplate = ({ navigation, route }) => {
             }
         ]));
 
-        Toast.show('Created successfully', Toast.SHORT);
+        Toast.show(lang.createSuccess, Toast.SHORT);
         navigation.goBack();
     }
 
@@ -286,7 +288,7 @@ export const EditTemplate = ({ navigation, route }) => {
                                         style={{ transform: [{ translateX: itemsRef[k] }, { scale: deleteRef[k] }] }}
                                     >
                                         <AddInput
-                                            placeholder="Item name"
+                                            placeholder={ lang.itemName }
                                             placeholderTextColor={ phcolor }
                                             defaultValue={ i.item }
                                             onChangeText={ (t: string) => handleInput(t, i.id) }
